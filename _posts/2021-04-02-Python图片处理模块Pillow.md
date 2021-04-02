@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Python图片处理模块Pillow
-subtitle:   Pillow 
+subtitle:   Pillow ~
 date:       2021-04-02
 author:     LW
 header-img: img/post-bg-lyy-L.jpg
