@@ -16,5 +16,5 @@ tags:
 ---
 五杀时刻！
 <video id="video" controls="" preload="none">
-    <source id="mp4" src="../../../ ../file/csgo-5kill.mp4" type="video/mp4">
+    <source id="mp4" src="../../../../file/csgo-5kill.mp4" type="video/mp4">
 </video>
