@@ -14,6 +14,7 @@ tags:
 ### 噫~有点意思。
 
 ---
-不知道写啥了。。。  
-
-日后再补充（逃）。
+五杀时刻！
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../ ../file/csgo-5kill.mp4" type="video/mp4">
+</video>
