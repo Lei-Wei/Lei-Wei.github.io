@@ -18,3 +18,8 @@ tags:
 <video id="video" controls="" preload="none">
     <source id="mp4" src="../../../../file/csgo-5kill.mp4" type="video/mp4">
 </video>
+
+四杀时刻！
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../../file/csgo-4kill.mp4" type="video/mp4">
+</video>
