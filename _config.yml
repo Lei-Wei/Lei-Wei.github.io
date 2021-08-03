@@ -89,15 +89,15 @@ service-worker: true
 page-mathjax: false
 
 # Friends
-friends:
-    [
+friends: [
+        # {
+        #     title: "Blog试验-曲目集合",
+        #     href: "http://leiwei.xyz/music-display/",
+        # },
         {
-            title: "Blog试验-曲目集合",
-            href: "http://leiwei.xyz/music-display/",
-        },
-        {
-            title: "Blog试验-Just the docs",
+            title: "文档类的Blog尝试-Just the docs",
             href: "https://leiwei.xyz/just-the-docs/",
         },
-        { title: "卡洛的太空船", href: "http://wateroxygen.cn/" },
+        # { title: "卡洛的太空船", href: "http://wateroxygen.cn/" },
+        { title: "卡洛的核心舱", href: "https://corecabin.cn/" },
     ]
