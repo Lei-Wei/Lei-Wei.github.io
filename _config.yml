@@ -95,6 +95,10 @@ friends: [
         #     href: "http://leiwei.xyz/music-display/",
         # },
         {
+            title: "【待施工】基于Hexo的Blog尝试",
+            href: "https://leiwei.xyz/BlogTest/",
+        },
+        {
             title: "文档类的Blog尝试-Just the docs",
             href: "https://leiwei.xyz/just-the-docs/",
         },
