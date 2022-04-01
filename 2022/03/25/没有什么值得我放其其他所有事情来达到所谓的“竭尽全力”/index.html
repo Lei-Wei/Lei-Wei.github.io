@@ -97,7 +97,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">9 min</span>
+            <span class="post-count">10 min</span>
         </span>
     </span>
 </div>
@@ -112,8 +112,8 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>没有任何一件事情值得放弃其他所有的事情来做到所谓的“竭尽全力”，极端思想不可取，所以——</p>
-<p>不如摆烂（手动doge）。</p>
+  <p>没有任何一件事情值得放弃其他所有的事情来做到所谓的“竭尽全力”，以“闭关”的方式对待生活本就是一个错误。</p>
+<p>所以——不如摆烂（手动doge）</p>
 <span id="more"></span>
 
 <h2 id="没有任何事情值得我这样做"><a href="#没有任何事情值得我这样做" class="headerlink" title="没有任何事情值得我这样做"></a>没有任何事情值得我这样做</h2><p>一个论文，折磨了我两个月，两个月几乎没做任何其他的事情，睁眼闭眼全是论文，停掉了运动，社团，音乐，那么多的爱好，心思全放在这个上面，就是要急于证明自己，向老师证明，向我自己证明，证明我这段时间做的不是毫无意义，证明我还可以做到。元旦的时候，我脑子里是论文，放假回家，脑子里还是论文。12月中下旬，给做了一次汇报得到了稍微的认可，顿时如释重负，整个人放松下来了，然后过了一天就开始发烧感冒，持续半个月才好；一月下旬，将完成稿交给了老师，又一次如释重负，又一次感冒发烧。第二次我判断是因为流感，我也自认为身体没有那么差受到一点压力就倒，但也意识到自身抵抗力确切收到了非常大的影响，身体在持续发出警报。</p>
@@ -237,7 +237,55 @@
     
   </nav>
 
-  
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.staticfile.org/valine/1.4.16/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "QhzIaCu4epfSLVlGoccyOGMs-gzGzoHsz",
+    app_key: "0NYvSTb2WYVBxhG4EOhQJnjO",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
    
     
     <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
