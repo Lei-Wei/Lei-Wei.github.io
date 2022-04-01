@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>尝试写点东西</title>
+    <url>/2021/03/06/2021-03-05-%E5%B0%9D%E8%AF%95%E5%86%99%E7%82%B9%E4%B8%9C%E8%A5%BF/</url>
+    <content><![CDATA[<h1 id="hi，这里是我的博客"><a href="#hi，这里是我的博客" class="headerlink" title="hi，这里是我的博客"></a>hi，这里是我的博客</h1><p>终于把个人网站搭建起来了！真是不容易呢，有这个想法很久了，走了很多弯路，最后终于还是做出来了。还不太完善，日后会一边写内容一边将网站继续完善完善。</p>
+<span id="more"></span>
+
+<h2 id="博客项目"><a href="#博客项目" class="headerlink" title="博客项目"></a>博客项目</h2><p>不得不感叹GitHub太强了！尝试过一些其他的方式，最后还是选择了白嫖<del>(bushi)</del> 。</p>
+<p>这里是我的<a href="https://github.com/lei-wei/lei-wei.github.io">博客项目主页</a>，折腾很麻烦，但我还是折腾了很久。目前看得懂部分的不多，目标是把相关的技术达到会使用的程度，然后把我的博客再完全个人定制一下。</p>
+<h2 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h2><p>域名是<a href="https://wanwang.aliyun.com/">阿里云</a>上首年五块钱买的，起名字的时候还是小小纠结了一下，转念一想五块钱还要什么自行车！于是简单粗暴地整就完了。</p>
+<h2 id="总想写点什么东西"><a href="#总想写点什么东西" class="headerlink" title="总想写点什么东西"></a>总想写点什么东西</h2><hr>
+<p>博客说到底也就是一个特殊一点的展示信息的平台，重要的还是内容，所以接下来不出意外的话我会尽可能地做一些尝试，往网站上推一些奇奇怪怪的内容，不要太在意哈。</p>
+<h2 id="一些计划"><a href="#一些计划" class="headerlink" title="一些计划"></a>一些计划</h2><p>日常琐碎的会随便写写，想到啥写啥，不会有什么顾忌。</p>
+<p>包括</p>
+<ul>
+<li>日常/回忆录</li>
+<li>成体系的学习笔记</li>
+<li>不成熟的想法，希望它们能慢慢变得成熟</li>
+</ul>
+<hr>
+<p>写完了的东西会不定期修改整理，自己整的好处就在于——我有完整的控制权，不会留下什么黑历史的~（也许）</p>
+<ul>
+<li>太琐碎的也许会删掉（不会的）</li>
+<li>类似美食之类的，可能会合并内容做成长篇</li>
+<li>一些的想法心路，会根据tag标签功能做成集合吧，</li>
+<li>个人回忆录系列</li>
+</ul>
+<p>具体怎么做谁知道呢，哪来那么多规则，写了再说吧！</p>
+<p>就从这一篇开始。</p>
+]]></content>
+      <categories>
+        <category>折腾</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python装饰器</title>
+    <url>/2021/03/16/2021-03-14-Python%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
+    <content><![CDATA[<h1 id="python装饰器"><a href="#python装饰器" class="headerlink" title="python装饰器"></a>python装饰器</h1><p>装饰器，在不改变原函数的情况下，为其增强功能。</p>
+<span id="more"></span>
+
+<h2 id="1-前置知识"><a href="#1-前置知识" class="headerlink" title="1. 前置知识"></a>1. 前置知识</h2><h3 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h3><p>在python中函数也是被视为对象的，可以作为参数传递</p>
+<h5 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">square</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">return</span> n * n</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">a, b, fun</span>):</span><br><span class="line">    res = fun(a) + fun(b)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(func(<span class="number">2</span>, <span class="number">3</span>, square))    <span class="comment"># 函数square作为函数传入到函数func中</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果：13</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sub</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a - b</span><br><span class="line"></span><br><span class="line">funcs = [add, sub]  <span class="comment"># 函数作为列表成员方便调用</span></span><br><span class="line"><span class="built_in">print</span>(funcs[<span class="number">0</span>](<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(funcs[<span class="number">1</span>](<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果：3，-1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="闭包函数"><a href="#闭包函数" class="headerlink" title="闭包函数"></a>闭包函数</h3><p>声明在一个函数种的函数被称为闭包函数，它可以访问其所在外部函数的参数和变量。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">outer</span>():</span><br><span class="line">    x = <span class="number">5</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inner</span>():</span><br><span class="line">        <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line"></span><br><span class="line">outer()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果是 5 ,内部函数inner引用外部函数的变量   </span></span><br><span class="line"><span class="comment"># inner()函数就是一个闭包</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、简单的装饰器示例"><a href="#2、简单的装饰器示例" class="headerlink" title="2、简单的装饰器示例"></a>2、简单的装饰器示例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calc_spend_time</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    description: </span></span><br><span class="line"><span class="string">    一个监测程序运行的装饰器函数。在不改动原业务函数的情况下，增添其功能。    </span></span><br><span class="line"><span class="string">    输入一个函数，即参数为业务函数  </span></span><br><span class="line"><span class="string">    返回一个函数，即新建的内部闭包函数（装饰过的函数）  </span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>():</span><br><span class="line">        <span class="comment"># 调用前的操作</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        <span class="comment"># 调用业务函数   </span></span><br><span class="line">        func()</span><br><span class="line">        <span class="comment"># 调用后的操作 </span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;func&#125;</span> is called&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(func.__name__ + <span class="string">&#x27;() start&#x27;</span>)</span><br><span class="line">        end = time.time()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;用时&#123;:.5f&#125;秒&#x27;</span>.<span class="built_in">format</span>(end-start))</span><br><span class="line">    <span class="keyword">return</span> wrapper  <span class="comment">#返回装饰后的闭包函数   </span></span><br><span class="line"></span><br><span class="line"><span class="meta">@calc_spend_time  </span><span class="comment"># 语法糖，相当于hello = decorator(hello)  </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;hello world!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    hello()</span><br><span class="line"></span><br><span class="line"><span class="comment"># hello world!     </span></span><br><span class="line"><span class="comment"># &lt;function hello at 0x01F2ED18&gt; is called    </span></span><br><span class="line"><span class="comment"># hello() start    </span></span><br><span class="line"><span class="comment"># 用时0.00099秒   </span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-业务函数带参数"><a href="#3-业务函数带参数" class="headerlink" title="3. 业务函数带参数"></a>3. 业务函数带参数</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    description: 记录日志的装饰器函数。</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        业务函数的参数通过wrapper的函数来传递  </span></span><br><span class="line"><span class="string">        返回值通过wrapper的返回值返回   </span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        value = func(*args, **kwargs)  <span class="comment"># 记录业务函数返回值   </span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;func&#125;</span> is called with arguments = <span class="subst">&#123;args&#125;</span> and kwargs = <span class="subst">&#123;kwargs&#125;</span>&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;func&#125;</span> return value <span class="subst">&#123;value&#125;</span>&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> value  <span class="comment"># 返回业务函数的返回值  </span></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@decorator  </span><span class="comment"># 语法糖，相当于hello = decorator(hello)   </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func1</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> args:</span><br><span class="line">        <span class="built_in">sum</span> += num</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;args = <span class="subst">&#123;args&#125;</span>, kwargs = <span class="subst">&#123;kwargs&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    func1(<span class="number">1</span>, <span class="number">2</span>, c=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># args = (1, 2), kwargs = &#123;&#x27;c&#x27;: 3, &#x27;d&#x27;: 4&#125;   </span></span><br><span class="line"><span class="comment"># &lt;function func1 at 0x013DED18&gt; is called with arguments = (1, 2) and kwargs = &#123;&#x27;c&#x27;: 3, &#x27;d&#x27;: 4&#125;    </span></span><br><span class="line"><span class="comment"># &lt;function func1 at 0x013DED18&gt; return value 3   </span></span><br></pre></td></tr></table></figure>
+
+<p>参数<code>*args</code>用来发送一个非键值对的<strong>可变数量的参数列表</strong>给一个函数，可看作<code>tuple</code><br><code>参数**kwargs</code>允许你将不定长度的<strong>键值对</strong>作为参数传递给一个函数，可看作<code>dict</code></p>
+<h2 id="4-装饰器带参数"><a href="#4-装饰器带参数" class="headerlink" title="4. 装饰器带参数"></a>4. 装饰器带参数</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">outer</span>(<span class="params">author</span>):  <span class="comment"># 再套一层，传入装饰器的参数   </span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">middle</span>(<span class="params">func</span>): <span class="comment"># 中间层传入业务函数</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            value = func(*args, **kwargs)  <span class="comment"># 记录业务函数返回值</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;author: &#x27;</span>, author,</span><br><span class="line">                  <span class="string">f&#x27;\n<span class="subst">&#123;func&#125;</span> is called with arguments = <span class="subst">&#123;args&#125;</span> and kwargs = <span class="subst">&#123;kwargs&#125;</span>&#x27;</span>,</span><br><span class="line">                  <span class="string">f&#x27;\nreturn value: <span class="subst">&#123;value&#125;</span>&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> value   <span class="comment"># 返回业务函数的返回值</span></span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> middle</span><br><span class="line"></span><br><span class="line"><span class="comment"># @outer(&#x27;lei&#x27;)  # 语法糖，相当于func1 = outer(&#x27;lei&#x27;)(func1)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func1</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> args:</span><br><span class="line">        <span class="built_in">sum</span> += num</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    func1 = outer(<span class="string">&#x27;lei&#x27;</span>)(func1)</span><br><span class="line">    func1(<span class="number">1</span>, <span class="number">2</span>, c=<span class="number">3</span>, d=<span class="number">4</span>)</span><br><span class="line">    <span class="comment"># # 不用语法糖等价1：</span></span><br><span class="line">    <span class="comment"># func1 = outer(&#x27;lei&#x27;)(func1)</span></span><br><span class="line">    <span class="comment"># func1(1, 2, c=3, d=4)</span></span><br><span class="line">    <span class="comment"># # 不用语法糖等价2：</span></span><br><span class="line">    <span class="comment"># func1 = outer(&#x27;lei&#x27;)(func1)(1, 2, c=3, d=4)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果：</span></span><br><span class="line"><span class="comment"># author:  lei</span></span><br><span class="line"><span class="comment"># &lt;function func1 at 0x0192EE38&gt; is called with arguments = (1, 2) and kwargs = &#123;&#x27;c&#x27;: 3, &#x27;d&#x27;: 4&#125;</span></span><br><span class="line"><span class="comment"># return value: 3</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>干了这碗襄阳牛肉面</title>
+    <url>/2021/03/07/2021-03-07-%E5%B9%B2%E4%BA%86%E8%BF%99%E7%A2%97%E7%89%9B%E8%82%89%E9%9D%A2/</url>
+    <content><![CDATA[<p>正宗的碱面配上红油汤汁，香气扑鼻味道可口，辅以虎皮鸡蛋、卤香干亦或是油条，再撒上些许葱末，在健身之后饥肠辘辘时来上一大碗，回味悠长，实乃一道美味。</p>
+<p>比较饿的时候可加面（加量），面虽香，但光面吃多未免会有些许乏味，换成卤香干、油条之类的小食搭配更佳。</p>
+<span id="more"></span>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/5c5630ff686cfb41.jpg" alt="干了这碗黄豆面！" title="干了这碗黄豆面！"></p>
+<center>干了这碗黄豆面！</center>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/4d46b487b8810d09.jpg" alt="干了这碗豆腐面" title="干了这碗豆腐面！"></p>
+<center>干了这碗豆腐面！</center>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/560cd2ac5379b0e1.jpg" alt="干了这碗牛杂面" title="干了这碗牛杂面！"></p>
+<center>干了这碗牛杂面！</center>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/61a234d8f9c3dfb1.jpg" alt="干了这碗牛肉面" title="干了这碗牛肉面！"></p>
+<center>在襄阳吃的襄阳牛肉面</center>
+
+<hr>
+<p>照片已补齐。</p>
+]]></content>
+      <tags>
+        <tag>美食</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【口琴】《单簧管波尔卡》</title>
+    <url>/2021/03/14/2021-03-14-%E3%80%90%E5%8F%A3%E7%90%B4%E3%80%91%E3%80%8A%E5%8D%95%E7%B0%A7%E7%AE%A1%E6%B3%A2%E5%B0%94%E5%8D%A1%E3%80%8B/</url>
+    <content><![CDATA[<h1 id="《单簧管波尔卡》"><a href="#《单簧管波尔卡》" class="headerlink" title="《单簧管波尔卡》"></a>《单簧管波尔卡》</h1><p>推荐樱之音的重奏版本，也是我入坑的版本。请欣赏~</p>
+<iframe  height=198     width=352  src="//player.bilibili.com/player.html?aid=35720317&bvid=BV1ft411m78S&cid=62659416&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<span id="more"></span>
+
+<p>第一个谱子是主旋律谱，后两个是网上搜到的作为和弦和贝斯声部的参考，个人觉得三重奏即可。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/9adb5389fe42d8dd.png" alt="《单簧管波尔卡》" title="《单簧管波尔卡》口琴版主旋律谱"></p>
+<center>《单簧管波尔卡》口琴版主旋律谱
+</center>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/50dfc56b8e2a3641.png" alt="《单簧管波尔卡》" title="《单簧管波尔卡》口琴三重奏谱（供参考）"></p>
+<center>《单簧管波尔卡》口琴三重奏谱（供参考）
+</center>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/bf230edd58064f2a.png" alt="《单簧管波尔卡》" title="《单簧管波尔卡》口琴四重奏谱（供参考）"></p>
+<center>《单簧管波尔卡》口琴四重奏谱（供参考）
+</center>
+]]></content>
+      <categories>
+        <category>收藏</category>
+        <category>music</category>
+      </categories>
+      <tags>
+        <tag>music</tag>
+        <tag>口琴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我被催更了</title>
+    <url>/2021/03/13/2021-03-14-%E5%82%AC%E6%9B%B4/</url>
+    <content><![CDATA[<h1 id="催更"><a href="#催更" class="headerlink" title="催更"></a>催更</h1><p>被催更了，不是别人，是被我自己催更了。建了个网站，买了个域名没多久，还清晰记得之前计划写博客时的雄心壮志，现在已经有一些时日没写作更新了，日日烦恼着该放些什么东西上去，也算是体会了一把内容创作者的不易。</p>
+<p>是有尝试过一些话题，写过几篇，有输出内心思考讲道理的，可到头来发现把内心所想写出，只是寥寥几句结论性的文字而已，短时间很难严谨地把前因后果理顺。自己从头读一遍，会发现缺少铺垫、逻辑不顺，毫无阅读性可言，真要写成一篇的话需要时间打磨。</p>
+<p>尝试过抒发内心情感的，可写到一半发现我的心中所想或许并不需要别人知道，我并没有强烈向他人倾诉的需求，别人知道了大概率也只有反面效果，或者从来就对我的想法没什么兴趣，索性搁笔，存做草稿收存。</p>
+<p>想过记录日常，但是大多数时间的日常都是很平淡的重复的事情，记流水账展示出来？完全没有必要。</p>
+<p>尝试用markdown做笔记写了一些了，真的很适合做编程笔记。但是笔记这种东西主观性很强，做笔记的过程也就是学习整理的过程，别人的笔记——特别是零散的笔记，并没有什么价值。反而若是系统性的知识框架则非常有用，若是有合适的会展示出来。</p>
+<span id="more"></span>
+
+<h1 id="接下来的计划"><a href="#接下来的计划" class="headerlink" title="接下来的计划"></a>接下来的计划</h1><p>接下来计划尝试多写，让自己习惯写作，内容依旧不定，但会尽量使内容完整，零散的草稿多了，整合时相互补全也就完整了。</p>
+<p>网站作为一个展示平台，与QQ空间、朋友圈之类的相比优点在于，更适合大段内容的展示以及更好的展示效果。所以可能会写一些需要给别人看的东西，到时候扔一个网址过去就好。</p>
+<p>另外今天看到了一些老照片，改天会根据照片回想一下有什么有意思的事情记录下来。有意思的事情还是很多的，不过这个就真得看心情写了。</p>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>记录</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>八方旅人-踊子プリムロゼのテーマ（Break Side）</title>
+    <url>/2021/03/15/2021-03-15-%E3%80%90%E6%9B%B2%E5%AD%90%E3%80%91%E5%85%AB%E6%96%B9%E6%97%85%E4%BA%BA/</url>
+    <content><![CDATA[<p>口琴主旋律谱</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(6)234543632321(6)</span><br><span class="line">(5)(6)(#6)(6)(#6)1234323212</span><br><span class="line">(6)234543632321(6)</span><br><span class="line">(5)(6)(#6)123456#6656</span><br><span class="line">#123456【1】632321(6)</span><br><span class="line">(5)(6)(#6)(6)(#6)1234323212</span><br><span class="line">256#6【1】#66【2】656542</span><br><span class="line">2#22#24525#665#456</span><br><span class="line">256#66554</span><br><span class="line">#22#24525#6#6【1】#66</span><br></pre></td></tr></table></figure>
+
+<p>附上各个版本演奏示例</p>
+<span id="more"></span>
+
+<h1 id="八方旅人-普利姆萝洁-踊子プリムロゼのテーマ"><a href="#八方旅人-普利姆萝洁-踊子プリムロゼのテーマ" class="headerlink" title="八方旅人 普利姆萝洁 踊子プリムロゼのテーマ"></a>八方旅人 普利姆萝洁 踊子プリムロゼのテーマ</h1><h1 id="八方旅人-舞娘-摩訶不思議の舞"><a href="#八方旅人-舞娘-摩訶不思議の舞" class="headerlink" title="八方旅人 - 舞娘 - 摩訶不思議の舞"></a>八方旅人 - 舞娘 - 摩訶不思議の舞</h1><h1 id="八方旅人-踊子プリムロゼのテーマ（Break-Side）"><a href="#八方旅人-踊子プリムロゼのテーマ（Break-Side）" class="headerlink" title="八方旅人-踊子プリムロゼのテーマ（Break Side）"></a>八方旅人-踊子プリムロゼのテーマ（Break Side）</h1><p>别名太多日文也看不懂orz，就全部列上来了嘿嘿。</p>
+<h3 id="音频"><a href="#音频" class="headerlink" title="音频"></a>音频</h3><p>这个应该是原版吧。</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=865857528&auto=0&height=66"></iframe>
+
+<p>手风琴版真的很好听啊</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1376159751&auto=0&height=66"></iframe>
+
+<h3 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h3><p>手风琴版本</p>
+<iframe height=198     width=352 src="//player.bilibili.com/player.html?aid=57689073&bvid=BV1t4411w7Q4&cid=100695977&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<p>口琴版本</p>
+<iframe height=198     width=352 src="//player.bilibili.com/player.html?aid=63245842&bvid=BV194411D7re&cid=109840071&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<p>B站上的参考总谱，版本不太一样但问题不大。</p>
+<iframe height=198     width=352 src="//player.bilibili.com/player.html?aid=245294939&bvid=BV18v411r7V4&cid=258481280&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>  
+
+<h3 id="谱"><a href="#谱" class="headerlink" title="谱"></a>谱</h3><p>口琴主旋律谱</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(6)234543632321(6)</span><br><span class="line">(5)(6)(#6)(6)(#6)1234323212</span><br><span class="line">(6)234543632321(6)</span><br><span class="line">(5)(6)(#6)123456#6656</span><br><span class="line">#123456【1】632321(6)</span><br><span class="line">(5)(6)(#6)(6)(#6)1234323212</span><br><span class="line">256#6【1】#66【2】656542</span><br><span class="line">2#22#24525#665#456</span><br><span class="line">256#66554</span><br><span class="line">#22#24525#6#6【1】#66</span><br></pre></td></tr></table></figure>
+
+<p>最后一个视频里的谱子pdf文件请点击<a href="../../../../file/%E8%B8%8A%E5%AD%90%E3%83%97%E3%83%AA%E3%83%A0%E3%83%AD%E3%82%BC%E3%81%AE%E3%83%86%E3%83%BC%E3%83%9E%EF%BC%88Break_Side%EF%BC%89.pdf">这里</a>查看，供参考。</p>
+<p>或者点击<a href="https://maiimg.com/pdf/?e=ag8XdjcGk9uucm">这里</a>查看。</p>
+<hr>
+<h3 id="重奏编排"><a href="#重奏编排" class="headerlink" title="重奏编排"></a>重奏编排</h3><p>目前已有的资源都列出来了，等待重奏改编。（应该不咕🕊）</p>
+]]></content>
+      <categories>
+        <category>收藏</category>
+        <category>music</category>
+      </categories>
+      <tags>
+        <tag>music</tag>
+        <tag>口琴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记这两周折腾博客的经历</title>
+    <url>/2021/03/20/2021-03-20-%E8%AE%B0%E8%BF%99%E4%B8%A4%E5%91%A8%E6%8A%98%E8%85%BE%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%BB%8F%E5%8E%86/</url>
+    <content><![CDATA[<blockquote>
+<p>希望在这时候并不是个好东西，它让我每次在快要放弃的时候，给我一点成就感和坚持下去的信念，让我顺着好奇心和侥幸心理的驱使，在这条看不到前方的路上继续摸索前行——纵使一路荆棘伤痕累累。直到像这次一样撞上南墙，亦或是失足掉下深渊。  </p>
+</blockquote>
+<h1 id="记这两周折腾博客的经历"><a href="#记这两周折腾博客的经历" class="headerlink" title="记这两周折腾博客的经历"></a>记这两周折腾博客的经历</h1><p>过去的两周里我开始疯狂沉迷于搭建博客，其实这个想法很早之前就有了，想整的时候没时间，有空的时候又太懒。。。所以一直往后拖，到现在终于做了出来。做出来之后写了四篇吧，也没写很多的内容，然后就对搭博客本身的技术起了浓厚的兴趣，从此开始了为期两周多的踩坑之旅。</p>
+<span id="more"></span>
+
+<h2 id="起初"><a href="#起初" class="headerlink" title="起初"></a>起初</h2><p>起初是看到一个教程，教怎么利用GitHub的<code>GitHub page</code>功能搭建免费的博客，跟着教程弄了一两天，终于弄出来了一个博客雏形，漂亮简洁的界面加上简单方便的用<code>git</code>的文本管理方式，写了几篇尝试一下熟悉流程。</p>
+<p>这里就有很多东西可以说了，依托GitHub的技术，得去学习这个“全球最大的同性交友网站”怎么使用吧，注册之后有很完整方便的流程引导，很完善——除了一个问题，网站是全英文的。于是耐着性子本着练习阅读英文文档的想法，老老实实跟着教程走了一遍，总算知道这个神奇的网站大概是个什么样子，还有GitHub的立身根本<code>git</code>是个什么技术以及使用流程了。（插个题外话，熟悉GitHub之后我真的感叹它太强了，微软太强了。）</p>
+<p>其实GitHub网站和<code>git</code>的学习是在寒假进行的，但是由于当时只是学习没有真正使用，忘得很快，再后面搭建blog使用GitHub的时候完全是重新学了一遍，对，就是很耗时间而且效率很低，做了无用功。而且学了一堆<code>git</code>的指令后，觉得命令行比较麻烦想试试图形界面，然后就发现了GitHub Desktop这个神奇的软件，终于不用敲命令行了，方便太多，但是使用的时候心中还是得有个完整的<code>git</code>思路。</p>
+<p>往后就是<code>markdown</code>了，作为一种轻量级标记语言，深受广大程序员的喜爱。学习这个倒是不难，语法很简单，但是真正使用起来，去换一个打字书写习惯，还是需要时间去适应的。几乎是在写每一篇的时候都刻意的去实现一些不同的东西，用会了也就能学到了。</p>
+<ul>
+<li>在csgo的文章中主要学了更新blog推文的方法，以及markdown基本用法；</li>
+<li>在襄阳牛肉面的文章中学了插入图片，以及使用图床；</li>
+<li>在python装饰器的文章中学习了插入代码块；</li>
+<li>在乐谱展示中学了利用插入<code>html</code>语言中的<code>ifram</code>标签，来尝试插入音乐和视频。</li>
+</ul>
+<p>此外，最近在折腾的时候，学了利用GitHub和picgo以及Typora搭建免费便捷的图床。</p>
+<p>这就是我的博客初体验，至此一切都还算正常，但后面就慢慢开始不对劲了。</p>
+<h2 id="折腾"><a href="#折腾" class="headerlink" title="折腾"></a>折腾</h2><p>想想也是挺神奇的，本来是想写博客，到头来变成了研究搭建博客本身的技术，而不是专注于博客内容。其实我还是想写博客内容的，甚至专门整了一个利于大文档结构的<code>Jekyll</code>模板——<code>Just-the-docs</code>，如果写的内容够多，应该能成系统化吧，到时候做一个打的说明文档，亦或是回忆录，都ok。</p>
+<p>博客弄出来了会使用了，可我还是不满足，也没有什么大毛病——现在想想都是写无伤大雅的小毛病，但恰恰是这种无法完全掌控的感觉，让我一定要研究个明白才甘心。于是后面尝试修改本地<code>host</code>文件提高GitHub访问速度以及显示图片的问题——失败；尝试本地搭建<code>Jekyll</code>本地运行环境——失败；因为<code>Jekyll</code>官方不支持Windows所以尝试了<code>wsl</code>（Windows subsystem for Linux）——成功，但是在Linux环境搭建<code>Jekyll</code>本地运行环境失败，Linux我更不会用，所以还是失败，最后电脑重启之后<code>Jekyll</code>居然就安装成功了，就，挺突然的，也很无语，但是最后试了很久发现安装的依赖包太多太杂了，和GitHub上托管用的不一样，所以还是失败，最后也还是只能用GitHub线上调试——即本地修改文件，上传到网站，等一会儿刷新几次才能看到结果，非常的低效，为了解决这个低效我饶了这么一大圈，最后还是回到了低效的原点。</p>
+<p>最初用的模板有一些小bug，就像去修改——不就是一堆程序嘛。但这是网站前端程序，和我平时熟知的算法程序完全就不是一个领域，太难了，各种尝试、踩坑、根据英文说明文档从头配置文件，但总是有问题无法解决，而且因为上面说过的本地调试环境搭建失败的问题，改动一下看到结果太麻烦了，太低效了，就这样挣扎了好几天，最后压倒我的那根稻草是：本地修改终于好了没有问题了，上传到线上，显示错误，bug，而且是我完全没有头绪的bug。后来我甚至想这种完全没有头绪的问题是不是早点出现比较好，因为前面出现的问题都是有头绪的，跟着那一点头绪多绕绕弯子总有办法解决，但解决之后总是有更多的问题跟在后面。希望在这时候并不是个好东西，它让我每次在快要放弃的时候，给我一点成就感和坚持下去的信念，让我顺着好奇心和侥幸心理的驱使，在这条看不到前方的路上继续摸索前行——纵使一路荆棘伤痕累累。直到像这次一样撞上南墙，亦或是失足掉下深渊。其实我早该知道，对于前端知识异常匮乏的我来说，要把这么一个大项目看懂知道问题出现在哪里并且修改正确，几乎是一个不可能完成的任务。但有时候就是这么不够理智。最后还是拿的别人的源代码，除了文章、图片以及少量的配置修改外，其他的根本不敢动——又回到了原点。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结一下这段时间搞博客的经历：</p>
+<ol>
+<li>尝试本地调试环境失败，回归低效的线上调试。</li>
+<li>尝试修改代码配置失败，回归直接用别人的代码。</li>
+</ol>
+<p>但也不是完全没成果：</p>
+<ol>
+<li>熟悉GitHub流程及使用方式；</li>
+<li>熟悉Jekyll博客的使用方式；</li>
+<li>熟悉markdown语法，不出意外的话今后会经常用它来写东西；</li>
+<li>接触了站点文件的结构，配置方法；</li>
+<li>接触了一些前端知识；</li>
+<li>最终有了三个比较稳定的博客界面：<ul>
+<li><a href="https://leiwei.xyz/">https://leiwei.xyz/</a>主博客主页</li>
+<li><a href="https://leiwei.xyz/music-display/">https://leiwei.xyz/music-display/</a>社团乐曲展示用</li>
+<li><a href="https://leiwei.xyz/just-the-docs/">https://leiwei.xyz/just-the-docs/</a>结构化文档框架</li>
+</ul>
+</li>
+</ol>
+<h2 id="今后"><a href="#今后" class="headerlink" title="今后"></a>今后</h2><p>比较稳定的平台搭建至此告一段落，不出意外的话今后就多写写内容，尽量不再去纠结配置、代码的事情了。写作也是个耗时耗力的事情，比如这一篇到这里2200多字，写的已经很快了，也没有很多的修改，还是花了我快两个小时。这种东西写了留下了终究还是有意义的吧，我也会尽量坚持下去。</p>
+<p>这两周的经历，不理智、无用功、低效、产出低，所有的空闲时间几乎都花在这个上面了，B站都很久没刷了。但是这样也有好处，至少我一个人安静瞎捣鼓、踩坑时学到的这些东西，是很难去忘记了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/post-bg-Sakura.jpg"></p>
+]]></content>
+      <categories>
+        <category>折腾</category>
+      </categories>
+      <tags>
+        <tag>心路</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>懒~~缺少源动力ԅ(¯﹃¯ԅ)</title>
+    <url>/2021/04/01/2021-04-01-%E6%87%92/</url>
+    <content><![CDATA[<h1 id="懒"><a href="#懒" class="headerlink" title="懒"></a>懒</h1><p>最近真的是太懒了，从灵魂深处往外冒，由内而外散发出的懒。懒到不想上课，不想看论文，不想出门，甚至懒得打游戏，就，什么都不想做。仿佛身处两个阶段之间的间隙，两场大战之间的休整，两节课之间的休息一样，可以什么都不做，静静地消磨掉这短暂的时间，只想停下来，喘息一会儿，好迎接接下来随时会将我卷入的一系列大事件之中。但是有什么大事即将来临吗？好像也没有吧，生活还是一如既往，不是事事都在我的掌控之中，但也很难发生什么让我很出乎意料。有什么大事刚刚过去让我一时半会儿很难缓得过来吗？好像有，好像也没有。</p>
+<span id="more"></span>
+
+<p>在这个时间点：2021年4月1日，开学刚过去一个月，前后也就发生了这些事情：沉迷了半个月的博客折腾完了，至少是告一段落；想尽我所能再拉一把的社团，弄了一周后意识到没有用（想写没写），同样是告一段落；各种课程？我现在将课程看的越来越淡了，因为我意识到时间和精力应该花在更有价值的，学以后能用得上的东西上；科研？压根没开始，老师评价的很对：完全没有进入状态，但是科研是我要做的事情，这件事持续给我着心理压力，让我懒的同时难以心安。</p>
+<p>每天都在发生太多太多事情，但是开学以来这段时间，我能说起的也就的这几件：博客、社团、科研，甚至学业都不能算，其余几件事都是我拿出了全部的精力和热情准备好献身于此。而学业——如果可以的话我根本就不想去上课，以现在的状态（与本科以及之前完全不同），上课只是为了完成这么一个过程，从而拿到学分以达到毕业的目的，而并不是我想做的事情。当然也是因为恰好没有我感兴趣的课。最近我一直在找寻生活的源动力，也就是我热爱的事情，整天想着去做的事情，灵魂深处的内在动力驱使着我去做的事情。缺失了这个源动力，整个人开始迷茫，不知所措，被一种“厌世“的情绪包围，喘不过气来。</p>
+<p>就拿最近整的博客来说，做一个博客是我一直以来的想法，开始整了之后，搭建博客的这件事情本身称为了我的一个热爱，每天除了吃饭睡觉上课，我将全部的精力和热情都放在这个事情上，每天坐在电脑前一整天都不会觉得累，甚至觉得时间不够——热爱的时候一直会觉得时间不够。而当我意识到：”做到这一步可以了，目的达到了，再往前一步太难了甚至现阶段做不到，已经可以了“的时候，这个事情就完结了，至少告一段落了，短时间不会再去想这件事了，可以完全放心地抛在脑后。而写内容、更新博客这方面，则更像是我的一个理性的想法，即：”做这件事很对，应该去做。“没有热情的时候只靠理性驱动是不行的，缺乏那种“内在的源动力”，距离上一次更新已经十一天了，更新这件事一直压在我的心上，但就是没有去做，究其原因当然是一样的——没动力。当然，前面关于“热情所在的事情”和“理性驱动的事情”并不是完全分开的，若是没有热情在的话，我现在也不会在写这篇文章了。</p>
+<p>有人说：生活的意义在于生活本身，要去热爱，从而发现并赋予生活以意义。我认为生活就是一个又一个的热爱连接在一起，推动着前进，而我现在的状态就像是在两场热爱之间，上一个热爱的末尾我得到了一个清晰的认知，知道它结束了，但下一个不知何时会到来，于是一个空档期出现了，而我此刻正处于这个空档之中。迷茫，进而有些焦虑。迷茫可能是因为暂时缺少了动力，不知该干什么，焦虑应该是因为确实有事情没做好给我留下了压力——学术上毫无进展。这样看来我这段时间感到的不安应该也是正常的了。</p>
+<p>一个奇思妙想：人是群居动物，是不是因为对一个人来说光靠个人的理性驱动是不够的，还要靠其他人来不经意间给他激起被称之为热情的东西，让他不断地产生内在的源动力，才能够一直向前进呢？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/lanyangyang.jpg" alt="lanyangyang"></p>
+]]></content>
+      <tags>
+        <tag>心路</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python图片处理模块Pillow</title>
+    <url>/2021/04/02/2021-04-02-Python%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97Pillow/</url>
+    <content><![CDATA[<h1 id="Python图片处理模块Pillow"><a href="#Python图片处理模块Pillow" class="headerlink" title="Python图片处理模块Pillow"></a>Python图片处理模块Pillow</h1><p>PIL：Python Imaging Library，是Python平台事实上的图像处理标准库，但PIL年久失修，仅支持到Python 2.7。于是一群志愿者在PIL的基础上创建了兼容的版本，名字叫<a href="https://github.com/python-pillow/Pillow">Pillow</a>，支持最新Python 3.x，作为PIL的替代版本。</p>
+<p>以这张懒羊羊的图片为例介绍基本用法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/lanyangyang.jpg"></p>
+<span id="more"></span>
+
+
+
+<h3 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h3><p>在命令行下通过pip安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install pillow</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="图片属性"><a href="#图片属性" class="headerlink" title="图片属性"></a>图片属性</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 导入模块</span></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">ImageFilePath = <span class="string">&#x27;C:/Users/lei/Desktop/lanyangyang.jpg&#x27;</span></span><br><span class="line"><span class="comment"># 以只读模式打开图片</span></span><br><span class="line">image = Image.<span class="built_in">open</span>(ImageFilePath, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="comment"># 获取图片属性</span></span><br><span class="line"><span class="built_in">print</span>(image)</span><br><span class="line"><span class="comment"># 获取图片大小</span></span><br><span class="line"><span class="built_in">print</span>(image.size)</span><br><span class="line"><span class="comment"># 获取图片源格式，JPEG，PNG等</span></span><br><span class="line"><span class="built_in">print</span>(image.<span class="built_in">format</span>)</span><br><span class="line"><span class="comment"># 获取图片模式,常见有：L（灰度图像），RGB和CMYK（真彩图像）</span></span><br><span class="line"><span class="built_in">print</span>(image.mode)</span><br><span class="line"><span class="comment"># 转化为灰度图像</span></span><br><span class="line">im2 = image.convert(<span class="string">&#x27;L&#x27;</span>)</span><br><span class="line">im2.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果如下：</span></span><br><span class="line"><span class="comment"># &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=1920x1080 at 0x230C953EFA0&gt;</span></span><br><span class="line"><span class="comment"># (1920, 1080)</span></span><br><span class="line"><span class="comment"># JPEG</span></span><br><span class="line"><span class="comment"># RGB</span></span><br><span class="line"><span class="comment"># L</span></span><br></pre></td></tr></table></figure>
+
+<p>转化为灰度后：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/lyy-L.jpg" alt="lyy-L"></p>
+<h4 id="格式转换"><a href="#格式转换" class="headerlink" title="格式转换"></a>格式转换</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 导入模块</span></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">ImageFilePath = <span class="string">&#x27;C:/Users/lei/Desktop/lanyangyang.jpg&#x27;</span></span><br><span class="line"><span class="comment"># 分割路径名、拓展名</span></span><br><span class="line">FilePath, FileExt = os.path.splitext(ImageFilePath)</span><br><span class="line"><span class="comment"># 格式转换</span></span><br><span class="line">Image.<span class="built_in">open</span>(ImageFilePath).save(<span class="string">&quot;&#123;&#125;.png&quot;</span>.<span class="built_in">format</span>(FilePath))</span><br></pre></td></tr></table></figure>
+
+<h4 id="制作缩略图、图标"><a href="#制作缩略图、图标" class="headerlink" title="制作缩略图、图标"></a>制作缩略图、图标</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 导入模块</span></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">image = Image.<span class="built_in">open</span>(<span class="string">&quot;lanyangyang.jpg&quot;</span>, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">size = <span class="number">128</span>, <span class="number">128</span></span><br><span class="line"><span class="comment"># 缩略图，改变图片大小</span></span><br><span class="line">image.thumbnail(size)</span><br><span class="line"><span class="built_in">print</span>(image.size)  <span class="comment"># (128, 72)</span></span><br><span class="line">image.save(<span class="string">&quot;lyy.ico&quot;</span>, <span class="string">&quot;JPEG&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>缩略图效果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/lyy.ico"></p>
+<h3 id="3-案例"><a href="#3-案例" class="headerlink" title="3 案例"></a>3 案例</h3><h4 id="生成验证码"><a href="#生成验证码" class="headerlink" title="生成验证码"></a>生成验证码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageDraw, ImageFont, ImageFilter</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机生成字符</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rndChar</span>():</span><br><span class="line">    txt_list = <span class="built_in">list</span>()</span><br><span class="line">    txt_list.extend([i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">65</span>, <span class="number">91</span>)])  <span class="comment"># 大写字母</span></span><br><span class="line">    txt_list.extend([i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">97</span>, <span class="number">123</span>)])  <span class="comment"># 小写字母</span></span><br><span class="line">    txt_list.extend([i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">48</span>, <span class="number">58</span>)])  <span class="comment"># 数字</span></span><br><span class="line">    select_index = random.choice(txt_list)  <span class="comment"># 随机选择</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">chr</span>(select_index)  <span class="comment"># chr返回整数对应的 ASCII 字符</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机背景颜色</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rndBgColor</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">tuple</span>(random.randint(<span class="number">64</span>, <span class="number">255</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机字符颜色</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rndTxtColor</span>():</span><br><span class="line">    <span class="keyword">return</span> (<span class="number">1</span>, random.randint(<span class="number">32</span>, <span class="number">127</span>), random.randint(<span class="number">32</span>, <span class="number">127</span>), random.randint(<span class="number">32</span>, <span class="number">127</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">go</span>():</span><br><span class="line">    <span class="comment"># 设置图片的宽高：</span></span><br><span class="line">    width, height = <span class="number">60</span> * <span class="number">4</span>, <span class="number">60</span></span><br><span class="line">    <span class="comment"># 创建新图片，参数分别为：mode, size, color.</span></span><br><span class="line">    image = Image.new(<span class="string">&#x27;RGB&#x27;</span>, (width, height), color=(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>))</span><br><span class="line">    <span class="comment"># 创建Font对象:</span></span><br><span class="line">    font = ImageFont.truetype(<span class="string">&#x27;C:/Windows/Fonts/Arial.ttf&#x27;</span>, <span class="number">36</span>)</span><br><span class="line">    <span class="comment"># 创建Draw对象:</span></span><br><span class="line">    draw = ImageDraw.Draw(image)</span><br><span class="line">    <span class="comment"># 填充背景，每个像素随机颜色:</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(width):</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(height):</span><br><span class="line">            draw.point((x, y), fill=rndBgColor())</span><br><span class="line">    <span class="comment"># 输出随机验证码</span></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        draw.text((<span class="number">60</span> * t + <span class="number">10</span>, <span class="number">10</span>), rndChar(), fill=rndTxtColor(), font=font)</span><br><span class="line">    image.show()</span><br><span class="line">    image.save(<span class="string">&quot;Verification-Code.jpg&quot;</span>)</span><br><span class="line">    <span class="comment"># 模糊处理</span></span><br><span class="line">    image = image.<span class="built_in">filter</span>(ImageFilter.BLUR)</span><br><span class="line">    image.show()</span><br><span class="line">    image.save(<span class="string">&quot;Verification-Code-blur.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">go()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>生成的验证码图片：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/Verification-Code.jpg" alt="Verification-Code"></p>
+<p>模糊处理后的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/Verification-Code-blur.jpg" alt="Verification-Code-blur"></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最近想听的歌（长期更新）</title>
+    <url>/2021/04/26/2021-04-26-%E6%9C%80%E8%BF%91%E6%83%B3%E5%90%AC%E7%9A%84%E6%AD%8C/</url>
+    <content><![CDATA[<p>因为都分布在不同平台不同形式，这样可以做一个合集方便看hhh</p>
+<p>能放在这里的，都是最近我认为很有味道还没听腻的那种，若是哪天听腻了就会默默删掉了。</p>
+<p>当然有些歌是听不腻的，若是听多了印在脑子里了，可以独自慢慢回味，也就没有放在这里的必要了。</p>
+<span id="more"></span>
+
+<h3 id="《亡命之徒》（《出发》）——纵贯线"><a href="#《亡命之徒》（《出发》）——纵贯线" class="headerlink" title="《亡命之徒》（《出发》）——纵贯线"></a>《亡命之徒》（《出发》）——纵贯线</h3><iframe src="//player.bilibili.com/player.html?aid=247954746&bvid=BV1bv411j72a&cid=332732947&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="Plastic-Love-塑料爱"><a href="#Plastic-Love-塑料爱" class="headerlink" title="Plastic Love 塑料爱"></a>Plastic Love 塑料爱</h3><iframe src="//player.bilibili.com/player.html?aid=31206044&bvid=BV1JW411d7GA&cid=54519736&page=2" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<iframe src="//player.bilibili.com/player.html?aid=75885850&bvid=BV1vJ411U7Ji&cid=132451138&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="《恋爱中的犀牛》-《氧气》"><a href="#《恋爱中的犀牛》-《氧气》" class="headerlink" title="《恋爱中的犀牛》+《氧气》"></a>《恋爱中的犀牛》+《氧气》</h3><p>03版恋爱的犀牛唱段，郝蕾演唱。</p>
+<iframe src="//player.bilibili.com/player.html?aid=7285048&bvid=BV1Gs411s7Mi&cid=11908586&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="《白日梦蓝》——刺猬乐队"><a href="#《白日梦蓝》——刺猬乐队" class="headerlink" title="《白日梦蓝》——刺猬乐队"></a>《白日梦蓝》——刺猬乐队</h3><p>特指这个现场版，大提琴和吉他的配合听着有一种梦幻的感觉。</p>
+<iframe src="//player.bilibili.com/player.html?aid=668247016&bvid=BV1ia4y1e79T&cid=191610558&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="《生之响往》——刺猬乐队"><a href="#《生之响往》——刺猬乐队" class="headerlink" title="《生之响往》——刺猬乐队"></a>《生之响往》——刺猬乐队</h3><iframe src="//player.bilibili.com/player.html?aid=797892538&bvid=BV18y4y167pk&cid=260758347&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="《生如夏花》《Forever-Young》《平凡之路》——朴树"><a href="#《生如夏花》《Forever-Young》《平凡之路》——朴树" class="headerlink" title="《生如夏花》《Forever Young》《平凡之路》——朴树"></a>《生如夏花》《Forever Young》《平凡之路》——朴树</h3><p>朴树身上总有一种令人向往的纯真和真挚。</p>
+<iframe src="//player.bilibili.com/player.html?aid=841303764&bvid=BV1u54y1q79i&cid=211384045&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="《-No-Fear-In-My-Heart-》——朴树"><a href="#《-No-Fear-In-My-Heart-》——朴树" class="headerlink" title="《 No Fear In My Heart 》——朴树"></a>《 No Fear In My Heart 》——朴树</h3><p>你在害怕什么 ~</p>
+<p>神级现场版，每次看和看上面的刺猬乐队的歌的时候，总感觉得去补一补《乐队的夏天》第一季。</p>
+<iframe src="//player.bilibili.com/player.html?aid=83340529&bvid=BV1tJ411H7h4&cid=142435321&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="《波西米亚狂想曲》——Queen"><a href="#《波西米亚狂想曲》——Queen" class="headerlink" title="《波西米亚狂想曲》——Queen"></a>《波西米亚狂想曲》——Queen</h3><p>我曾在这首歌和《 No Fear In My Heart 》中寻找救赎——记忆中也就只有这两首歌。</p>
+<iframe src="//player.bilibili.com/player.html?aid=501148064&bvid=BV1VK411u7vy&cid=282062140&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+]]></content>
+      <categories>
+        <category>收藏</category>
+        <category>music</category>
+      </categories>
+      <tags>
+        <tag>音乐</tag>
+        <tag>娱乐</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python学习笔记</title>
+    <url>/2021/05/08/2021-05-08-python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>比较乱，有空再整理~</p>
+<span id="more"></span>
+
+<h1 id="python学习笔记"><a href="#python学习笔记" class="headerlink" title="python学习笔记"></a>python学习笔记</h1><h2 id="使用镜像安装包"><a href="#使用镜像安装包" class="headerlink" title="使用镜像安装包"></a>使用镜像安装包</h2><p>安装包时国外服务器有时访问很慢，这里可以使用国内镜像</p>
+<p>给<code>pip</code>命令添加<code>-i</code>参数，后接镜像索引的url，例如：</p>
+<p><code>https://pypi.tuna.tsinghua.edu.cn/simple gensim</code></p>
+<h2 id="全局变量关键字global"><a href="#全局变量关键字global" class="headerlink" title="全局变量关键字global"></a>全局变量关键字<code>global</code></h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cnt = <span class="number">0</span> <span class="comment"># 计数器</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_cnt</span>():</span><br><span class="line">  <span class="comment">#函数内对全局变量操作时，显示声明这是一个全局变量</span></span><br><span class="line">  <span class="keyword">global</span> cnt</span><br><span class="line">  cnt += <span class="number">1</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_cnt</span>():</span><br><span class="line">  <span class="keyword">global</span> cnt</span><br><span class="line">  <span class="built_in">print</span>(cnt)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">  show_cnt()</span><br><span class="line">  add_cnt()</span><br><span class="line">  show_cnt()</span><br><span class="line"></span><br><span class="line">\<span class="comment">#输出结果：</span></span><br><span class="line">\<span class="comment"># 0</span></span><br><span class="line">\<span class="comment"># 1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串前缀u-r-b-f"><a href="#字符串前缀u-r-b-f" class="headerlink" title="字符串前缀u,r,b,f"></a>字符串前缀<code>u,r,b,f</code></h2><p><code>u</code>，后面字符串以Unicode格式编码，常用于防止中文出现的乱码问题。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">u&#x27;中文’</span></span><br></pre></td></tr></table></figure>
+
+<p><code>r</code>，纯文本？去掉反斜杠机制，常用于正则表达式re</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">r&quot;\n\n\n\n”</span></span><br></pre></td></tr></table></figure>
+
+<p><code>b</code>，bytes数据类型，常用于网络编程种，浏览器、服务器的数据传输</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = <span class="string">b&#x27;&lt;h1&gt;Hello World!&lt;/h1&gt;&#x27;</span> </span><br></pre></td></tr></table></figure>
+
+<p><code>f</code>，表示字符串内支持大括号内的python表达式</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">f&#x27;a = <span class="subst">&#123;a&#125;</span>’</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, <span class="built_in">id</span>, name</span>):</span><br><span class="line">        <span class="comment"># 初始化对象</span></span><br><span class="line">        self.<span class="built_in">id</span> = <span class="built_in">id</span></span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__repr__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 展示对象</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;id = &#x27;</span>+<span class="built_in">str</span>(self.<span class="built_in">id</span>) + <span class="string">&#x27;, name = &#x27;</span>+self.name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 调用对象方法</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;I can be called&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;my name is <span class="subst">&#123;self.name&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">stu = Student(<span class="number">1</span>, <span class="string">&#x27;asd&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">callable</span>(stu))  <span class="comment"># 检查对象是否可调用</span></span><br><span class="line"><span class="built_in">print</span>(stu)  <span class="comment"># 展示对象</span></span><br><span class="line">stu()  <span class="comment"># 调用对象</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h2><h3 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 不存在则创建文件夹</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mkdir</span>(<span class="params">path</span>):</span><br><span class="line">    isexists = os.path.exists(path)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isexists:</span><br><span class="line">        os.mkdir(path)</span><br></pre></td></tr></table></figure>
+
+<h2 id="在函数中创建函数"><a href="#在函数中创建函数" class="headerlink" title="在函数中创建函数"></a>在函数中创建函数</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">shit</span>(<span class="params">a</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">good</span>():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;good&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">bad</span>():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;bad&quot;</span></span><br><span class="line">    <span class="keyword">return</span> good <span class="keyword">if</span> a == <span class="number">1</span> <span class="keyword">else</span> bad()</span><br><span class="line"></span><br><span class="line">s = shit(<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(s)  <span class="comment"># &lt;function shit.&lt;locals&gt;.good at 0x00000259CB292DC0&gt;</span></span><br><span class="line"><span class="built_in">print</span>(s())  <span class="comment"># good</span></span><br><span class="line"><span class="built_in">print</span>(shit(<span class="number">1</span>)())  <span class="comment"># good</span></span><br><span class="line"><span class="built_in">print</span>(shit(<span class="number">0</span>))  <span class="comment"># bad</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="for-循环后的-else-语句"><a href="#for-循环后的-else-语句" class="headerlink" title="for 循环后的 else 语句"></a>for 循环后的 else 语句</h2><p>若循环正常结束，而并没有遇到<code>break</code>停下，则会跳转到后面的<code>else</code>语句。</p>
+<p>如以下寻找因数的例子，若没找到则是质数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, i):</span><br><span class="line">        <span class="keyword">if</span> i % j == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;&#123;&#125; = &#123;&#125; * &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(i, j, i/j))</span><br><span class="line">            <span class="comment"># print(i, &#x27;equals&#x27;, j, &#x27;*&#x27;, i/j)</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">     <span class="comment"># loop fell through without finding a factor</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;&#123;&#125; is a prime number! &#x27;</span>.<span class="built_in">format</span>(i))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 is a prime number!</span></span><br><span class="line"><span class="comment"># 3 is a prime number!</span></span><br><span class="line"><span class="comment"># 4 = 2 * 2.0</span></span><br><span class="line"><span class="comment"># 4 equals 2 * 2.0</span></span><br><span class="line"><span class="comment"># 5 is a prime number!</span></span><br><span class="line"><span class="comment"># 6 = 2 * 3.0</span></span><br><span class="line"><span class="comment"># 6 equals 2 * 3.0</span></span><br><span class="line"><span class="comment"># 7 is a prime number!</span></span><br><span class="line"><span class="comment"># 8 = 2 * 4.0</span></span><br><span class="line"><span class="comment"># 8 equals 2 * 4.0</span></span><br><span class="line"><span class="comment"># 9 = 3 * 3.0</span></span><br><span class="line"><span class="comment"># 9 equals 3 * 3.0</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一个新的笔记软件——TiddlyWiki</title>
+    <url>/2021/12/18/2021-12-18-%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E7%AC%94%E8%AE%B0%E8%BD%AF%E4%BB%B6%E2%80%94%E2%80%94TiddlyWiki/</url>
+    <content><![CDATA[<h1 id="一个新的笔记软件"><a href="#一个新的笔记软件" class="headerlink" title="一个新的笔记软件"></a>一个新的笔记软件</h1><p>一晃半年多过去了，这个博客也荒废了好久，趁着做TiddlyWiki的时候把它再捡起来。曾经顶下的周更的目标也早就忘得一干二净，实在是愧疚。</p>
+<p>总之，我又换了一个新的笔记软件——TiddlyWiki，具体可以进里面的<code>About</code> 条目看看，反正就是很折腾，地址在这里<a href="https://leiwei.space/wiki/">https://leiwei.space/wiki/</a>，你看域名是不是很好记哈哈，也可以在友链的地方跳转，叫“胖虎的wiki笔记”。</p>
+<span id="more"></span>
+
+<p>以后有逻辑的笔记就放在那了，分类跳转做的很好，想说的话、图片展示就在这了，后面工具用顺手了再慢慢整吧。</p>
+<p>好像又给自己挖个坑，做一个网页上的图片展区，看起来好像不难，论文搞完就整。（好多事情都是说论文搞完了整，拖延的理由冠冕堂皇，要是最后咕了就当我没说吧QAQ）</p>
+]]></content>
+      <categories>
+        <category>折腾</category>
+      </categories>
+      <tags>
+        <tag>折腾</tag>
+        <tag>知识整理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>天气查询邮件提醒</title>
+    <url>/2021/05/30/2021-05-30-python%E5%A4%A9%E6%B0%94%E6%9F%A5%E8%AF%A2%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92/</url>
+    <content><![CDATA[<h1 id="天气查询邮件提醒"><a href="#天气查询邮件提醒" class="headerlink" title="天气查询邮件提醒"></a>天气查询邮件提醒</h1><h3 id="软件界面ui"><a href="#软件界面ui" class="headerlink" title="软件界面ui"></a>软件界面ui</h3><h4 id="ui设计"><a href="#ui设计" class="headerlink" title="ui设计"></a>ui设计</h4><p>用的是<code>PyQt5</code>，先用<code>Qt Designer</code>设计界面，拖动组件改属性即可，注意<code>objectName</code>一定要改，保持良好的习惯。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lei-wei/pic_bed/img/image-20210530172731604.png" alt="image-20210530172731604"></p>
+<span id="more"></span>
+
+<h4 id="主程序调用ui"><a href="#主程序调用ui" class="headerlink" title="主程序调用ui"></a>主程序调用ui</h4><p>将ui文件转化成<code>py</code>文件<code>Ui_weatherQuery.py</code>，在这个文件里绑定事件，然后在主程序里面调用界面就可。</p>
+<h5 id="ui事件绑定业务函数"><a href="#ui事件绑定业务函数" class="headerlink" title="ui事件绑定业务函数"></a><code>ui</code>事件绑定业务函数</h5><p>在<code>Ui_weatherQuery.py</code>文件里，</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">self.queryBtn.clicked.connect(Dialog.queryWeather)</span><br><span class="line">self.clearBtn.clicked.connect(Dialog.clearText)</span><br><span class="line">self.pushButton.clicked.connect(Dialog.sendEmail)</span><br></pre></td></tr></table></figure>
+
+<h5 id="主程序里与ui的交互"><a href="#主程序里与ui的交互" class="headerlink" title="主程序里与ui的交互"></a>主程序里与ui的交互</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MainDialog</span>(<span class="title class_ inherited__">QDialog</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parent=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(QDialog, self).__init__(parent)</span><br><span class="line">        self.ui = Ui_weatherQuery.Ui_Dialog()</span><br><span class="line">        self.ui.setupUi(self)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">queryWeather</span>(<span class="params">self</span>):</span><br><span class="line">        city_name = self.ui.txtCityName.text()</span><br><span class="line">        self.res = query_weather(city_name=city_name)</span><br><span class="line">        self.ui.txtQueryRes.setText(self.res)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">clearText</span>(<span class="params">self</span>):</span><br><span class="line">        self.ui.txtQueryRes.clear()</span><br><span class="line">        self.ui.txtCityName.clear()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sendEmail</span>(<span class="params">self</span>):</span><br><span class="line">        email_send.go(msg=self.res, subject_msg=<span class="string">&#x27;天气预报&#x27;</span>)</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="显示界面模板框架"><a href="#显示界面模板框架" class="headerlink" title="显示界面模板框架"></a>显示界面模板框架</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> PyQt5.QtWidgets <span class="keyword">import</span> QApplication, QDial, QDialog</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    myApp = QApplication(sys.argv)</span><br><span class="line">    myDlg = MainDialog()</span><br><span class="line">    myDlg.show()</span><br><span class="line"></span><br><span class="line">    sys.exit(myApp.exec_())</span><br></pre></td></tr></table></figure>
+
+<h3 id="天气查询部分"><a href="#天气查询部分" class="headerlink" title="天气查询部分"></a>天气查询部分</h3><h4 id="调用api"><a href="#调用api" class="headerlink" title="调用api"></a>调用api</h4><p>api有免费的，申请就完事了。</p>
+<p>用<code>request</code>包发送请求，返回的<code>json</code>解析一下就可。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">query_weather</span>(<span class="params">city_name=<span class="string">&quot;武汉&quot;</span>, record=<span class="literal">True</span></span>):</span><br><span class="line">    appid = <span class="string">&quot;29467327&quot;</span></span><br><span class="line">    appsecret = <span class="string">&quot;27kJLhNF&quot;</span></span><br><span class="line">    <span class="comment"># 请求地址&amp;信息</span></span><br><span class="line">    url = <span class="string">u&quot;https://www.tianqiapi.com/free/week?appid=&#123;&#125;&amp;appsecret=&#123;&#125;&amp;city=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(</span><br><span class="line">        appid, appsecret, city_name)</span><br><span class="line">    <span class="comment"># 发送请求得到返回结果</span></span><br><span class="line">    r = requests.get(url)</span><br><span class="line">    <span class="comment"># 格式化显示json</span></span><br><span class="line">    res = json.dumps(r.json(), indent=<span class="number">4</span>, ensure_ascii=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">if</span> record:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;res.txt&quot;</span>, <span class="string">&#x27;w&#x27;</span>)<span class="keyword">as</span> f:</span><br><span class="line">            f.write(res)</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>部分结果展示</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;cityid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;101200101&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;武汉&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;update_time&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2021-05-30 15:55:18&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;date&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2021-05-30&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wea&quot;</span><span class="punctuation">:</span> <span class="string">&quot;晴转多云&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;wea_img&quot;</span><span class="punctuation">:</span> <span class="string">&quot;yun&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;tem_day&quot;</span><span class="punctuation">:</span> <span class="string">&quot;30&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;tem_night&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;win&quot;</span><span class="punctuation">:</span> <span class="string">&quot;南风&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;win_speed&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;3级&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        ......</span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="邮件发送部分"><a href="#邮件发送部分" class="headerlink" title="邮件发送部分"></a>邮件发送部分</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># smtp（simple mail transfer protocol）是python自带的邮件模块，负责邮件传输</span></span><br><span class="line"><span class="comment"># email负责邮件内容</span></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> parseaddr, formataddr</span><br><span class="line"></span><br><span class="line"><span class="comment"># stmp_server=&#123;&#x27;163&#x27;:&#x27;smtp.163.com&#x27;,&#x27;qq&#x27;:&#x27;stmp.qq.com&#x27;&#125;</span></span><br><span class="line"><span class="comment"># port_list=&#123;&#x27;163&#x27;:25,&#x27;qq&#x27;:465&#125;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">email_send</span>:</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    description:封装了构造邮件及发送邮件的操作</span></span><br><span class="line"><span class="string">    param &#123;*&#125;</span></span><br><span class="line"><span class="string">    return &#123;*&#125;</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, from_addr, password, to_addr, server=<span class="string">&quot;smtp.qq.com&quot;</span>, port=<span class="number">465</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        self.from_addr = from_addr</span><br><span class="line">        self.password = password</span><br><span class="line">        self.to_addr = to_addr</span><br><span class="line">        self.server = server</span><br><span class="line">        self.port = port</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">server_start</span>(<span class="params">self</span>):</span><br><span class="line">        self.server = smtplib.SMTP_SSL(host=self.server, port=self.port)</span><br><span class="line">        <span class="built_in">print</span>(self.server)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">server_quit</span>(<span class="params">self</span>):</span><br><span class="line">        self.server.quit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_format_addr</span>(<span class="params">self, addr_msg</span>):</span><br><span class="line">        name, addr = parseaddr(addr_msg)</span><br><span class="line">        <span class="keyword">return</span> formataddr((Header(name, <span class="string">&#x27;utf-8&#x27;</span>).encode(), addr))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">send_text_data</span>(<span class="params">self, text, data_type, subject_msg</span>):</span><br><span class="line">        msg = MIMEText(_text=text, _subtype=<span class="string">&#x27;plain&#x27;</span>, _charset=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">        msg[<span class="string">&#x27;From&#x27;</span>] = self._format_addr(self.from_addr)</span><br><span class="line">        msg[<span class="string">&#x27;To&#x27;</span>] = self._format_addr(self.to_addr)</span><br><span class="line">        msg[<span class="string">&#x27;Subject&#x27;</span>] = Header(s=subject_msg, charset=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">        self.server.login(self.from_addr, self.password)</span><br><span class="line">        self.server.sendmail(self.from_addr, self.to_addr, msg.as_string())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">go</span>(<span class="params">msg=<span class="string">&#x27;新的邮件代码测试&#x27;</span>, subject_msg=<span class="string">&#x27;A new test&#x27;</span></span>):</span><br><span class="line">    <span class="comment"># 账号信息</span></span><br><span class="line">    sender = <span class="string">&quot;141*****@qq.com&quot;</span>  <span class="comment"># 发件人</span></span><br><span class="line">    password = <span class="string">&quot;*******&quot;</span>   <span class="comment"># 在QQ邮箱里可打开SMTP服务的密码，非邮箱登录密码</span></span><br><span class="line">    receivers = [<span class="string">&quot;13******@qq.com&quot;</span>] <span class="comment"># 收件人</span></span><br><span class="line">    <span class="comment"># 邮件文本内容</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        es = email_send(sender, password, receivers)</span><br><span class="line">        es.server_start()</span><br><span class="line">        es.send_text_data(msg, <span class="string">&#x27;plain&#x27;</span>, subject_msg)</span><br><span class="line">        es.server_quit()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    go()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>没有什么值得我放弃其他所有事情来达到所谓的“竭尽全力”</title>
+    <url>/2022/03/25/%E6%B2%A1%E6%9C%89%E4%BB%80%E4%B9%88%E5%80%BC%E5%BE%97%E6%88%91%E6%94%BE%E5%85%B6%E5%85%B6%E4%BB%96%E6%89%80%E6%9C%89%E4%BA%8B%E6%83%85%E6%9D%A5%E8%BE%BE%E5%88%B0%E6%89%80%E8%B0%93%E7%9A%84%E2%80%9C%E7%AB%AD%E5%B0%BD%E5%85%A8%E5%8A%9B%E2%80%9D/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="没有任何事情值得我这样做"><a href="#没有任何事情值得我这样做" class="headerlink" title="没有任何事情值得我这样做"></a>没有任何事情值得我这样做</h2><p>一个论文，折磨了我两个月，两个月几乎没做任何其他的事情，睁眼闭眼全是论文，停掉了运动，社团，音乐，那么多的爱好，心思全放在这个上面，就是要急于证明自己，向老师证明，向我自己证明，证明我这段时间做的不是毫无意义，证明我还可以做到。元旦的时候，我脑子里是论文，放假回家，脑子里还是论文。12月中下旬，给做了一次汇报得到了稍微的认可，顿时如释重负，整个人放松下来了，然后过了一天就开始发烧感冒，持续半个月才好；一月下旬，将完成稿交给了老师，又一次如释重负，又一次感冒发烧。第二次我判断是因为流感，我也自认为身体没有那么差受到一点压力就倒，但也意识到自身抵抗力确切收到了非常大的影响，身体在持续发出警报。</p>
+<p>1月21号，给老师发完邮件，就彻底放松了下来，开始好好计划假期该怎么做，然后是今天（02月12日），开会讲论文，顿时我就开始胃里犯恶心，心理上和生理上一并强烈抵触，像是逃不掉的梦魇追了上来，压得我喘不过气。我试着排解，但越想越喘不过气，太难受了，太急于得到成果害怕失败，投入太沉重，想的太重要，以至于不知不觉从意识深处开始抵触，心理上一并带动生理上的抵触。</p>
+<p>我不能陷得太深了，我很清楚这一点，太过专注，不仅是容易盲目，更容易让人走火入魔。身体频繁出现问题已经是明显的信号了，今天犯恶心也是心里已经有问题了。没有任何一件事情值得放弃其他所以的事情来做，可以很短期的全身心投入，但必须很快抽离开，长时间的，没有任何事情值得，过于执着的时候不知不觉放弃的东西往往更加宝贵。</p>
+<p>没录下这次是会议是一大败笔，我将记录下该记录的，然后将论文相关的东西全部封存，等我缓过来了，再去重新面对。</p>
+<p>我一直想让自己变得足够专注，看来我对自己还是够狠，一不小心就能走到反面。所有做过的错事，都会在未来的某个时候让你付出代价，逃不掉的。做学术的事是的，奖学金的事也是的。不要偏执，要好好调节，人要顾及的事情那么多，为什么要偏执在那个牛角尖里。</p>
+<p>没有任何一件事情值得放弃其他所有的事情来做到所谓的“竭尽全力”，至少论文这件事不应该。</p>
+<p>——以上写于2022年02月12日</p>
+<hr>
+<h2 id="盲目"><a href="#盲目" class="headerlink" title="盲目"></a>盲目</h2><p>以上是我最近经历的一次痛苦经历，由心理层面上巨大压力，以及生理层面上连续发烧，组成的双重折磨。后来呢，也就如同上面记录的那样，我把电脑中这段时间搞论文的乱七八糟的占了我半个桌面的文件，花了整整一个下午整理成了一个文件夹，然后封存起来，抛之脑后，舒舒服服的过了一个春节，以及节后的半个寒假。再次打开文件夹已经是开学后了，以功利的“写论文”而不是高大上的“做改变世界的研究”的角度，抽出一部分内容在做现在的工作。大部分钻牛角尖的内容到现在我都没动它。</p>
+<p>这次经历着实是一次灵魂上的洗礼，它让我开始怀疑我对世界的认识是否正确，对待生活是否太盲目。仔细回顾我对待生活的方式是这样的：绝大部分的事情都有他自己的运行轨迹，对此不去操心不受影响，在人群中我都是不愿意过多显露自己的存在，以避免与不重要的事物或他人产生我无法控制的联系；相反，对于少数我认定的事情，我希望能有所掌控，负责到底。对于现阶段的我来说，个人的学习或者工作就属于后者这一范畴，是没有任何可以推脱的理由的，必须要尽全力去做好以证明自己。</p>
+<p>可是事与愿违，我一直以来信奉的策略在这一刻失效了，投入巨量的时间精力但却一直得不到想要的结果，我自己也陷入了自我怀疑之中。这一切值得吗？万一这个事情完成不了呢？万一这件事触及到了我能力的边界，不是靠投入精力就一定能够完成的呢？万一这件事一开始就是错误的，我给自己定了一个错误的目标，钻进了死胡同里呢？我要干什么，做研究还是写论文？做研究是要做出影响世界的成果，写论文只需要过审稿人那一关就行了，区别巨大的的两码事，我的目标好像之前从来没有明确过，只知道盲目努力然后顺其自然等着成果的到来。能有学术追求和梦想固然是好事，但也需要意识到这件事的难度，以及需要做到什么程度，要有心理预期。什么都没有想清楚就盲目浪费自己的精力，用所谓“努力”来感动自己，遇到困难了只知道折腾自己，何必呢。</p>
+<h2 id="“闭关”状态"><a href="#“闭关”状态" class="headerlink" title="“闭关”状态"></a>“闭关”状态</h2><p>从小我父亲对我说过：“学的时候认认真真的学，玩的时候舒舒服服的玩。”，基于此我养成了一个习惯：在学习、工作的时候尽可能的投入和专注，心无旁骛，追求一种类似“入定”的状态，以达到在短时间内尽可能的高效，这个习惯伴随着我的整个学习生涯，在我大学之前的各个时期发挥了巨大的作用。</p>
+<p>不同于中学严格的学校管理，大学时期我有了大量可以自己支配的时间，只要完成学业任务就好。因此在考试周或者学期末的时候，在每一门课程考核的前几天，我都会让自己全身心投入到课程复习中去，从早到晚，心无旁骛，可以拖很久才去吃饭，也可以工作到深夜。这几天会不停的刷题，背诵考点资料，亦或是学完一本书，只为了一个目标——尽可能在考试上多得一些分数，考完就把一切抛之脑后。我把这种做法称之为“闭关”，很形象对吧。</p>
+<p>闭关是我学生时代常用的一种手段，帮助我度过了各种考试，发展到顶峰是考研阶段。那是我迄今最为彻底的一次闭关，时间持续很长。我只记得当时压力很大，我把电脑放回了家里，杜绝了几乎一切娱乐，每天醒来洗漱完就去投入其中，晚上睡前最后一件事是把看完的笔记放进书包。当时我就感叹：像这样全世界都不会有任何事情来打扰我，让我这么长时间内完全专心于一件事情的阶段，可能这辈子都不会再有第二次了。虽然心态崩过一段时间，我也将它当作修行历练，最后只觉得苦尽甘来。</p>
+<p>到了读研阶段，没有很明确的说我该做什么，只是有一个大致的方向，我就顺着这个方向一头扎进学习工作之中。随着时间和精力的大量投入，产出却寥寥无几，压力也就随之而来。我想着，付出终究会是有收获的，持续高强度的投入最后一定会有好的产出。可随着时间的推移，这种状态逐渐快要支撑不住了，我才猛然发现，我这是在“闭关”吗？持续多长时间了，又错过了多少事情。我才明白，不是所有事情都像早期的学习生涯那样，有一个明显的时间界限，时间到了考完试就会结束；也不是所有事情都像早期的学习生涯那样铺好了路，只要努力走就会得到结果。闭关不是在所有地方都适用。就像这次，猛然发现自己陷在一件事情上太久了，不知道这样的付出值不值得，更不知道这段时间自己错过了什么，想想以后人生的路都要自己选，没有绝对正确的路，也没有“考试”这种阶段性的警醒，若是不知不觉将闭关状态作为了人生的主旋律，那必然是一件可怕的事情，老想着等我XXX完成了我就去做XXX，不知不觉给了自己太多逃避的借口，只会留下数不清的遗憾。</p>
+<h2 id="“摆烂”的智慧"><a href="#“摆烂”的智慧" class="headerlink" title="“摆烂”的智慧"></a>“摆烂”的智慧</h2><p>在我十八岁的时候，除了可以拿身份证进网吧之外，我并没有感受太多到“长大了”带来的“自己可以做主”的兴奋感，反而有些不知所措，好像可以做很多事情，但又好像都不是那么容易去做。到了现在，我更是感受到“自己的路要自己走”的含义，时时刻刻都得做出无关对错的、尽力不会日后感到后悔的选择，像闭关这样“盲目的沉浸在有限的事情上”的状态，越少越好。</p>
+<p>对于“闭关”，我需要辩证地去看待它，对于有明确目标的短期任务，闭关状态还是很好用的。这里就提出了一个高要求：对自身的生活合理清晰的规划。<br>联想到最近看的很喜欢的一个B站视频，其中有一段对话是这样的：</p>
+<blockquote>
+<p>老蒋：你跟我不一样你有很多身份，作家、网红up主等等，你的主身份是什么？  </p>
+</blockquote>
+<blockquote>
+<p>仲尼：我同时是父亲，是丈夫，是我妈的儿子，这些所有的构成了一个完整的球体的我，所以我觉得没有一个单词可以定义我是谁，有时候我自己都不知道我是谁。</p>
+</blockquote>
+<blockquote>
+<p>老蒋：你这样不定一个主身份，是为什么？</p>
+</blockquote>
+<blockquote>
+<p>仲尼：任何人只要定了自己的主身份之后，他就有可能把其他的可能性给捏死了，我就是个活着的人……</p>
+</blockquote>
+<blockquote>
+<p>老蒋：那你很自信，你觉得自己可以同时做好这几个事情。</p>
+</blockquote>
+<blockquote>
+<p>仲尼：我没有一件事情做的好，你看我做up主也不上不下，我写的书也卖不怎么好啊，然后我做父亲还被老师投诉了，我老婆呢还经常不理我，但是同时呢，我还是这几件事必须同事去做。</p>
+</blockquote>
+<blockquote>
+<p>老蒋：你不会想着，既然这样的话集中精力把其中一个事干好吗？</p>
+</blockquote>
+<blockquote>
+<p>仲尼：那我其他事情不就完蛋了？</p>
+</blockquote>
+<blockquote>
+<p>（网友：顶级摆烂hhh）</p>
+</blockquote>
+<p>原视频点击 <a href="https://www.bilibili.com/video/BV13q4y1F7Ja?share_source=copy_web">链接</a></p>
+<p>完全上帝视角的合理规划是不存在的，未来也永远在变化，需要做的事情太多也没有主次之分，不如别想太多，尽情拥抱生活吧！</p>
+<p>记得脚踩大地，仰望星空。</p>
+<p>仲尼的视频</p>
+<p>end</p>
+<hr>
+<p>以下是草稿留存。</p>
+<p>这么想不光是甩锅，其实也是有理由的，</p>
+<ol>
+<li>太理想化目标设定的太高：够分量的改变世界的成果，凭什么你一个研究生能弄出来？这么容易的话要那么多博士教授院士他们做什么</li>
+<li>目标与实际有偏差：工科研究生毕业看的是研究成果吗？不，看的是工作量。</li>
+<li>做的事情无意义：毕业看的是论文有多少篇，找工作看的是你的工作能力和实习经历，谁关心你的研究成果难度多高分量多大？</li>
+</ol>
+<p>总结下来，就是一种学生思维的局限性，对接收到的要求指令深信不疑，没看清做事情是否有意义就盲目去做了，也没寻找做事情有没有更好的方式，老老实实学习相信努力就一定有成果。到头来只会怀疑自己不够努力，或是吃了亏之后才意识到自己太单纯。</p>
+<p>可是没想到，读研居然又是一个长时间的闭关，甚至持续时间比考研阶段长的多，考研是有固定期限的，到了考试时间，不管结果如何都解放了，可是读研很难有固定期限，很难界定做到什么程度是“可以了”，有人跟着老师的带领，论文、软著、专利早就有了，而有的人还在烦恼实验的结果不理想。有的人花点钱借助各种外在手段完成论文任务，也有人苦苦思索。</p>
+<p>后来我才发现，做研究和写论文有关联但不是必然关联的两件事；我从来没明确自己的目标，我所做的工作是否有意义，做到什么程度才算可以了；我不知不觉闭关好久了，老是想着：等我论文出来了我就去XXXXX，不知不觉给了我自己太多逃避的借口，浪费了太多的时间和机会。也让我开始后怕，以后步入工作要是是这个状态，那前途也太昏暗了。</p>
+<p>总之，不是所有事情都像早期的学习生涯那样，有一个明显的时间界限，阶段是有限的，时间到了就会结束；也不是所有事情都像早期的学习生涯那样铺好了路，只要努力走就会得到结果。闭关不是在所有地方都适用。</p>
+<p>总之，不是所有事情都像早期的学习生涯那样，一切都是那么的单纯，单纯到路已经在前方铺好，只要努力往前走就会有好的结果。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>C++学习笔记</title>
+    <url>/2021/05/08/2021-05-08-C++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>比较乱，有空再整理~</p>
+<span id="more"></span>
+
+<h1 id="C-学习笔记"><a href="#C-学习笔记" class="headerlink" title="C++学习笔记"></a>C++学习笔记</h1><h2 id="命名空间的using声明"><a href="#命名空间的using声明" class="headerlink" title="命名空间的using声明"></a>命名空间的<code>using</code>声明</h2><p>一般用到标准输入输出流的时候，库函数属于命名空间<code>std</code>，用作<code>std::cout</code>、<code>std::cin</code><br>或者在开头声明：<code>using namespace std;</code><br>或者单独声明：<code>using std::cin;</code>、<code>using std::cout;</code></p>
+<h2 id="类型说明符auto"><a href="#类型说明符auto" class="headerlink" title="类型说明符auto"></a>类型说明符<code>auto</code></h2><p><code>auto</code>：让编译器去分析表达式所属的类型。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> cnt = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">auto</span> pi = <span class="number">3.14</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="类型指示符decltype"><a href="#类型指示符decltype" class="headerlink" title="类型指示符decltype"></a>类型指示符<code>decltype</code></h3><p><code>decltype</code>是<code>declare type</code>的缩写，译为声明类型。<br>能从表达式的类型推断出变量的类型，如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(<span class="built_in">sizeof</span>(arr)) length;</span><br></pre></td></tr></table></figure>
+
+<h3 id="基于范围的for语句-range-for"><a href="#基于范围的for语句-range-for" class="headerlink" title="基于范围的for语句(range for)"></a>基于范围的<code>for</code>语句(range for)</h3><p>for (<em>declaration</em> : <em>expression</em>)</p>
+<p>​ <em>statement</em></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 将string中的字符分隔输出</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> c : str)</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; c &lt;&lt; “ ”;</span><br><span class="line">&#125;</span><br><span class="line">cout &lt;&lt; str; <span class="comment">// h e l l o   w o r l d</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将string中字符编程大写</span></span><br><span class="line"><span class="comment">// 用上引用符 &amp;</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> &amp;c : str)</span><br><span class="line">&#123;</span><br><span class="line">    c = <span class="built_in">toupper</span>(c);</span><br><span class="line">&#125;</span><br><span class="line">cout &lt;&lt; str; <span class="comment">// HELLO WORLD</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="cpp中类相关"><a href="#cpp中类相关" class="headerlink" title="cpp中类相关"></a>cpp中类相关</h1><h3 id="静态成员变量和静态成员函数"><a href="#静态成员变量和静态成员函数" class="headerlink" title="静态成员变量和静态成员函数"></a>静态成员变量和静态成员函数</h3><p>类中定义的静态成员、函数，为整个类所有，所有对象共享。所以可以直接通过类名访问，当然也可以通过对象直接访问。</p>
+<p>静态成员函数只能直接访问静态变量和静态函数（因为不能实例化）。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">test</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> m_value;  <span class="comment">//定义私有类的静态成员变量</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">test</span>()</span><br><span class="line">    &#123;</span><br><span class="line">     m_value++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">getValue</span><span class="params">()</span>  <span class="comment">//定义类的静态成员函数</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> m_value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> test::m_value = <span class="number">0</span>;  <span class="comment">//类的静态成员变量需要在类外分配内存空间，需要单独初始化。const则在声明的同时初始化。</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    test t1;</span><br><span class="line">    test t2;</span><br><span class="line">    test t3;</span><br><span class="line"> </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;test::m_value2 = &quot;</span> &lt;&lt; test::<span class="built_in">getValue</span>() &lt;&lt; endl; <span class="comment">//通过类名直接调用公有静态成员函数，获取对象个数</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;t3.getValue() = &quot;</span> &lt;&lt; t3.<span class="built_in">getValue</span>() &lt;&lt; endl;  <span class="comment">//通过对象名调用静态成员函数获取对象个数</span></span><br><span class="line">    <span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果为3</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdn.net/20180804112453261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xtczEwMDg2MTE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>静态成员函数</th>
+<th>普通成员函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>所有对象共享</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>隐含<code>this</code>指针</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>访问普通成员变量（函数）</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>访问静态成员变量（函数）</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+</tbody></table>
+<h3 id="类的继承"><a href="#类的继承" class="headerlink" title="类的继承"></a>类的继承</h3><p>相应的构造函数也可以继承。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Gene</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> <span class="type">int</span> index;</span><br><span class="line"> <span class="type">int</span> dir;</span><br><span class="line"> <span class="built_in">Gene</span>(<span class="type">int</span> _index, <span class="type">int</span> _dir) :<span class="built_in">index</span>(_index), <span class="built_in">dir</span>(_dir) &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Res</span> :<span class="keyword">public</span> Gene</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> <span class="type">int</span> station;</span><br><span class="line"> <span class="type">double</span> st;</span><br><span class="line"> <span class="type">double</span> pt;</span><br><span class="line"> <span class="built_in">Res</span>(<span class="type">int</span> _station, <span class="type">int</span> _index, <span class="type">int</span> _dir, <span class="type">double</span> _st, <span class="type">double</span> _pt) :<span class="built_in">Gene</span>(_index, _dir), <span class="built_in">station</span>(_station), <span class="built_in">st</span>(_st), <span class="built_in">pt</span>(_pt) &#123;&#125;;</span><br><span class="line"> <span class="function">string <span class="title">fout</span><span class="params">()</span><span class="type">const</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="读取CSV文件，表格型"><a href="#读取CSV文件，表格型" class="headerlink" title="读取CSV文件，表格型"></a>读取CSV文件，表格型</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">ifstream <span class="title">inFile</span><span class="params">(filePath, ios::in)</span></span>;</span><br><span class="line">string lineStr;</span><br><span class="line"><span class="built_in">getline</span>(inFile, lineStr);<span class="comment">//跳过第一行</span></span><br><span class="line"><span class="keyword">while</span> (<span class="built_in">getline</span>(inFile, lineStr))</span><br><span class="line">&#123;</span><br><span class="line"> <span class="comment">// 打印整行字符串</span></span><br><span class="line"> <span class="comment">//cout &lt;&lt; lineStr &lt;&lt; endl;</span></span><br><span class="line"> <span class="comment">// 存成二维表结构</span></span><br><span class="line"> <span class="function">stringstream <span class="title">ss</span><span class="params">(lineStr)</span></span>;</span><br><span class="line"> string str;</span><br><span class="line"> vector&lt;string&gt; lineArray;</span><br><span class="line"> <span class="comment">// 按照逗号分隔</span></span><br><span class="line"> <span class="keyword">while</span> (<span class="built_in">getline</span>(ss, str, <span class="string">&#x27;,&#x27;</span>))</span><br><span class="line">  lineArray.<span class="built_in">push_back</span>(str);</span><br><span class="line"> strArray.<span class="built_in">push_back</span>(lineArray);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="判断字符串是否是数字"><a href="#判断字符串是否是数字" class="headerlink" title="判断字符串是否是数字"></a>判断字符串是否是数字</h1><p>c++比较愚蠢，只能一个字符一个字符的判断</p>
+<h3 id="方法一：判断字符的ASCII范围"><a href="#方法一：判断字符的ASCII范围" class="headerlink" title="方法一：判断字符的ASCII范围"></a>方法一：判断字符的ASCII范围</h3><p>（数字的ASCII范围为48~57）</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/img/1012444-20161118130400795-373092178.jpg" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/img/ascll.jpg" alt="ascll"></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">AllisNum</span><span class="params">(string str)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; str.<span class="built_in">size</span>(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> tmp = (<span class="type">int</span>)str[i];</span><br><span class="line">        <span class="keyword">if</span> (tmp &gt;= <span class="number">48</span> &amp;&amp; tmp &lt;= <span class="number">57</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二：使用C-提供的stringstream对象"><a href="#方法二：使用C-提供的stringstream对象" class="headerlink" title="方法二：使用C++提供的stringstream对象"></a>方法二：使用C++提供的stringstream对象</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">stringstream <span class="title">sin</span><span class="params">(str)</span></span>;  </span><br><span class="line"> <span class="type">double</span> d;  </span><br><span class="line"> <span class="type">char</span> c;  </span><br><span class="line"> <span class="keyword">if</span>(!(sin &gt;&gt; d))  </span><br><span class="line"> &#123;</span><br><span class="line">  <span class="comment">/*解释： </span></span><br><span class="line"><span class="comment">            sin&gt;&gt;t表示把sin转换成double的变量（其实对于int和float型的都会接收），</span></span><br><span class="line"><span class="comment">   如果转换成功，则值为非0，如果转换不成功就返回为0 </span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span> (sin &gt;&gt; c) </span><br><span class="line"> &#123;</span><br><span class="line">  <span class="comment">/*解释：</span></span><br><span class="line"><span class="comment">  此部分用于检测错误输入中，数字加字符串的输入形式（例如：34.f），在上面的的部分（sin&gt;&gt;t）</span></span><br><span class="line"><span class="comment">  已经接收并转换了输入的数字部分，在stringstream中相应也会把那一部分给清除，</span></span><br><span class="line"><span class="comment">  此时接收的是.f这部分，所以条件成立，返回false </span></span><br><span class="line"><span class="comment">          */</span> </span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"> &#125;  </span><br><span class="line"> <span class="keyword">return</span> <span class="literal">true</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法三：使用std-isdigit来判断"><a href="#方法三：使用std-isdigit来判断" class="headerlink" title="方法三：使用std::isdigit来判断"></a>方法三：使用<code>std::isdigit</code>来判断</h3><p>有一个大坑，若字符是中文可能会报错。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">isNumber</span><span class="params">(<span class="type">const</span> string&amp; str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> <span class="type">const</span> &amp;c : str) &#123;</span><br><span class="line">        <span class="keyword">if</span> (std::<span class="built_in">isdigit</span>(c) == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数字取整取小数"><a href="#数字取整取小数" class="headerlink" title="数字取整取小数"></a>数字取整取小数</h2><ul>
+<li><p><code>ceil()</code>函数，向上取整，天花板函数</p>
+</li>
+<li><p><code>floor()</code>函数，向下取整，地板函数</p>
+</li>
+<li><p><code>round()</code>函数，四舍五入，取值不受正负号影响。</p>
+</li>
+</ul>
+<h1 id="程序运行时间计时⏲"><a href="#程序运行时间计时⏲" class="headerlink" title="程序运行时间计时⏲"></a>程序运行时间计时⏲</h1><p><code>clock()</code>有毫秒级的精度，直接上例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="type">time_t</span> startTime, endTime;</span><br><span class="line"> startTime = <span class="built_in">clock</span>();</span><br><span class="line">    <span class="built_in">func</span>();<span class="comment">//程序运行</span></span><br><span class="line">    endTime = <span class="built_in">clock</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;运行时间：&quot;</span> &lt;&lt; (endTime - startTime) / CLOCKS_PER_SEC &lt;&lt; <span class="string">&quot; s&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="cpp运算符重载"><a href="#cpp运算符重载" class="headerlink" title="cpp运算符重载"></a>cpp运算符重载</h1><h2 id="C-重载相等运算符"><a href="#C-重载相等运算符" class="headerlink" title="C++重载相等运算符"></a>C++重载相等运算符</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"> <span class="type">int</span> m_age;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> <span class="type">bool</span> <span class="keyword">operator</span>==(<span class="type">const</span> Person&amp; other)</span><br><span class="line"> &#123;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;call member function operator==&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>-&gt;m_age == other.m_age)  </span><br><span class="line">  &#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="function">Person <span class="title">p1</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line"> <span class="function">Person <span class="title">p2</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (p1 == p2)</span><br><span class="line"> &#123;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;p1 is equal with p2.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="C-输入-输出运算符重载"><a href="#C-输入-输出运算符重载" class="headerlink" title="C++ 输入/输出运算符重载"></a>C++ 输入/输出运算符重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="comment">/* args */</span>)&#123;&#125;;</span><br><span class="line">    <span class="keyword">friend</span> ostream &amp;<span class="keyword">operator</span>&lt;&lt;(ostream &amp;output, <span class="type">const</span> MyClass my)</span><br><span class="line">    &#123;</span><br><span class="line">        output &lt;&lt; my.a &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span> output;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">friend</span> istream &amp;<span class="keyword">operator</span>&gt;&gt;(istream &amp;input, MyClass &amp;my)</span><br><span class="line">    &#123;</span><br><span class="line">        input &gt;&gt; my.a;</span><br><span class="line">        <span class="keyword">return</span> input;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyClass my;</span><br><span class="line">    cout &lt;&lt; my.a &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; my;</span><br><span class="line">    cin &gt;&gt; my;</span><br><span class="line">    cout &lt;&lt; my;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="cpp匿名函数"><a href="#cpp匿名函数" class="headerlink" title="cpp匿名函数"></a>cpp匿名函数</h1><h3 id="lambda函数的一般形式"><a href="#lambda函数的一般形式" class="headerlink" title="lambda函数的一般形式"></a>lambda函数的一般形式</h3><p>cpp中的匿名函数用Lambda表达式实现，又称为lambda函数</p>
+<p>可以这样来定义一个lambda函数</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> func = []() &#123; std::cout &lt;&lt; <span class="string">&quot;Hello world&quot;</span>; &#125;;</span><br><span class="line">   <span class="built_in">func</span>(); <span class="comment">// now call the function</span></span><br></pre></td></tr></table></figure>
+
+<p>正常情况下，只要函数体中所有return都是同一个类型的话，编译器就会自行判断函数的返回类型。也可以显示地指定lambda函数的返回类型。这个需要用到函数返回值后置的功能,比如这个例子</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">[] () -&gt; <span class="type">int</span> &#123; <span class="keyword">return</span> <span class="number">1</span>; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以总的来说lambda函数的一般形式就是：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">[captures] (params) -&gt; ret &#123;Statments;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="lambda函数的变量截取"><a href="#lambda函数的变量截取" class="headerlink" title="lambda函数的变量截取"></a>lambda函数的变量截取</h3><ul>
+<li>[] 不截取任何变量</li>
+<li>[&amp;} 截取外部作用域中所有变量，并作为引用在函数体中使用</li>
+<li>[=] 截取外部作用域中所有变量，并拷贝一份在函数体中使用</li>
+<li>[=, &amp;foo] 截取外部作用域中所有变量，并拷贝一份在函数体中使用，但是对foo变量使用引用</li>
+<li>[bar] 截取bar变量并且拷贝一份在函数体重使用，同时不截取其他变量</li>
+<li>[this] 截取当前类中的this指针。如果已经使用了&amp;或者=就默认添加此选项。</li>
+</ul>
+<h3 id="lambda函数的使用"><a href="#lambda函数的使用" class="headerlink" title="lambda函数的使用"></a>lambda函数的使用</h3><p>在类似<code>find_if</code>函数中需要人工定义一个<code>cmp</code>函数的情况，用lambda函数就会很方便，一行代码不用另外再显示定义一个函数。示例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="comment">//类的列表，要按其中某个属性排序</span></span><br><span class="line">vector&lt;Solution&gt; resArray; </span><br><span class="line"><span class="comment">//自定义排序函数</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">TALBP::cmp_fitness</span><span class="params">(Solution ind1, Solution ind2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ind1.fitness &lt; ind2.fitness;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">sort</span>(resArray.<span class="built_in">begin</span>(), resArray.<span class="built_in">end</span>(), cmp_fitness);</span><br><span class="line"><span class="comment">//或用lambda函数（匿名函数）更方便</span></span><br><span class="line"><span class="built_in">sort</span>(resArray.<span class="built_in">begin</span>(), resArray.<span class="built_in">end</span>(), [](<span class="type">const</span> Solution&amp; s1, <span class="type">const</span> Solution&amp; s2) &#123;<span class="keyword">return</span> s1.fitness &lt; s2.fitness; &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//同理</span></span><br><span class="line"><span class="type">int</span> target_index;</span><br><span class="line"><span class="keyword">auto</span> it = <span class="built_in">find_if</span>(resArray.<span class="built_in">begin</span>(), resArray.<span class="built_in">end</span>(), [&amp;](<span class="type">const</span> Solution &amp; s) &#123;<span class="keyword">return</span> s.op.index == target_index; &#125;);</span><br><span class="line"></span><br><span class="line">for_each( v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), [] (<span class="type">int</span> val)  </span><br><span class="line">&#123;  </span><br><span class="line">    cout &lt;&lt; val;  </span><br><span class="line">&#125; );</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="cpp中vector相关"><a href="#cpp中vector相关" class="headerlink" title="cpp中vector相关"></a>cpp中vector相关</h1><h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><h3 id="初始化其大小"><a href="#初始化其大小" class="headerlink" title="初始化其大小"></a>初始化其大小</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//默认初始化，size = 0</span></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v1;</span><br><span class="line"><span class="comment">//规定长度，以下操作等价</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v2</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">v1.<span class="built_in">resize</span>(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//规定长度并赋初值，以下操作等价</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v3</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line">v1.<span class="built_in">resize</span>(<span class="number">3</span>, <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="二维数组的初始化"><a href="#二维数组的初始化" class="headerlink" title="二维数组的初始化"></a>二维数组的初始化</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">v6</span>(m, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(n, <span class="number">0</span>));<span class="comment">//m*n大小，值为0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="用已有数值初始化"><a href="#用已有数值初始化" class="headerlink" title="用已有数值初始化"></a>用已有数值初始化</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用另一个数组初始化，以下操作等价</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v4</span><span class="params">(v1)</span></span>;</span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v4 = v1;</span><br><span class="line"><span class="comment">//用另外一个数组的指针来初始化</span></span><br><span class="line"><span class="type">int</span> a[<span class="number">3</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v5</span><span class="params">(a, a + <span class="number">2</span>)</span></span>;<span class="comment">//数组指针</span></span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">v5</span><span class="params">(v1.begin(), v1.end() - <span class="number">1</span>)</span></span>;<span class="comment">//容器指针</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><p>单个在最前面，即第一个位置插入</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">v.<span class="built_in">insert</span>(v.<span class="built_in">begin</span>(),val)</span><br></pre></td></tr></table></figure>
+
+<p>两个vector合并，也用<code>insert</code>，即后一个在前一个的最后插入。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">resStaList.<span class="built_in">insert</span>(resStaList.<span class="built_in">end</span>(), temp.<span class="built_in">begin</span>(), temp.<span class="built_in">end</span>());</span><br></pre></td></tr></table></figure>
+
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><h3 id="简单排序"><a href="#简单排序" class="headerlink" title="简单排序"></a>简单排序</h3><p>从小到大排序比较简单，使用sort()函数既可</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sort</span>(v.<span class="built_in">begin</span>(),v.<span class="built_in">end</span>()); <span class="comment">//从小到大</span></span><br><span class="line"><span class="built_in">sort</span>(vec.<span class="built_in">rbegin</span>(), vec.<span class="built_in">rend</span>());<span class="comment">//从大到小，逆向，等价于下式</span></span><br><span class="line"><span class="built_in">reverse</span>(arr.<span class="built_in">begin</span>(), arr.<span class="built_in">end</span>());</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义排序"><a href="#自定义排序" class="headerlink" title="自定义排序"></a>自定义排序</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="comment">//类的列表，要按其中某个属性排序</span></span><br><span class="line">vector&lt;Solution&gt; resArray; </span><br><span class="line"><span class="comment">//自定义排序函数</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">TALBP::cmp_fitness</span><span class="params">(Solution ind1, Solution ind2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ind1.fitness &lt; ind2.fitness;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">sort</span>(resArray.<span class="built_in">begin</span>(), resArray.<span class="built_in">end</span>(), cmp_fitness);</span><br><span class="line">或用lambda函数（匿名函数）更方便</span><br><span class="line"><span class="built_in">sort</span>(resArray.<span class="built_in">begin</span>(), resArray.<span class="built_in">end</span>(),[](<span class="type">const</span> Solution&amp; s1, <span class="type">const</span> Solution&amp; s2) &#123;<span class="keyword">return</span> s1.fitness &lt; s2.fitness; &#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p><a href="https://www.notion.so/391b7baf50134eb38a7603b2efaa85e7">Untitled</a></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/img/image-20210914210322302.png" alt="image-20210914210322302"></p>
+<h3 id="查找并删除"><a href="#查找并删除" class="headerlink" title="查找并删除"></a>查找并删除</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> it = <span class="built_in">find</span>(opr_left.<span class="built_in">begin</span>(), opr_left.<span class="built_in">end</span>(), value);</span><br><span class="line"><span class="keyword">auto</span> it = <span class="built_in">find_if</span>(opr_left.<span class="built_in">begin</span>(), opr_left.<span class="built_in">end</span>(), cmp);</span><br><span class="line">opr_left.<span class="built_in">erase</span>(it);</span><br></pre></td></tr></table></figure>
+
+<h2 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h2><p>用<code>unique</code>函数来帮忙</p>
+<p>查找相邻并且相同的，将之移到容器末尾</p>
+<p>最后返回非重复的的迭代器处。</p>
+<p>再将返回值到末尾的重复值用<code>erase</code>删除就可以得到去重后的结果了</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> last = std::<span class="built_in">unique</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>());</span><br><span class="line">v.<span class="built_in">erase</span>(last, v.<span class="built_in">end</span>()); </span><br></pre></td></tr></table></figure>
+
+<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>^</td>
+<td>匹配行的开头</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配行的结尾</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意单个字符</td>
+</tr>
+<tr>
+<td>[…]</td>
+<td>匹配[]中的任意一个字符</td>
+</tr>
+<tr>
+<td>(…)</td>
+<td>设定分组</td>
+</tr>
+<tr>
+<td>\</td>
+<td>转义字符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配数字[0-9]</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配字母[a-z]，数字，下划线</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配空格</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>\w 取反</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>\d 取反</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>\s 取反</td>
+</tr>
+<tr>
+<td>+</td>
+<td>前面的元素重复1次或多次</td>
+</tr>
+<tr>
+<td>*</td>
+<td>前面的元素重复任意次</td>
+</tr>
+<tr>
+<td>?</td>
+<td>前面的元素重复0次或1次</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>前面的元素重复n次</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>前面的元素重复至少n次</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>前面的元素重复至少n次，至多m次</td>
+</tr>
+<tr>
+<td>|</td>
+<td>逻辑或</td>
+</tr>
+</tbody></table>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;regex&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//regex_match 匹配</span></span><br><span class="line"><span class="comment">//regex_search 查找</span></span><br><span class="line"><span class="comment">//regex_replace 替换</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">regex <span class="title">reg</span><span class="params">(<span class="string">&quot;([a-zA-Z]*) ([a-zA-Z]*)$&quot;</span>)</span></span>;</span><br><span class="line">    cmatch what; <span class="comment">//匹配的词语检索出来</span></span><br><span class="line">    <span class="type">bool</span> isit = <span class="built_in">regex_match</span>(<span class="string">&quot;id admin&quot;</span>, what, reg); <span class="comment">//</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i !=what.<span class="built_in">size</span>(); ++i) <span class="comment">//输出匹配信息</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; what[i+<span class="number">1</span>].first &lt;&lt; <span class="string">&quot;\t&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;match&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有个坑，<code>regex_match</code>方法需要输入<code>const char*</code>，这时就需要类型转化</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//string与const char*转换</span></span><br><span class="line">string s = <span class="string">&quot;string_To_const char* &quot;</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *c_s=s.<span class="built_in">c_str</span>();</span><br><span class="line"><span class="comment">//还可以直接使用string类中的data()函数，直接对const char *赋值</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *c_ss = s.<span class="built_in">data</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//const char*转换string</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span>* p = <span class="string">&quot;const char* _To_string&quot;</span>;</span><br><span class="line"><span class="function">string <span class="title">y</span><span class="params">(p)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="键值对，哈希表"><a href="#键值对，哈希表" class="headerlink" title="键值对，哈希表"></a>键值对，哈希表</h1><p><code>unordered_map</code>容器，直译过来就是”无序 map 容器”的意思。所谓“无序”，指的是 unordered_map 容器不会像 map 容器那样对存储的数据进行排序。换句话说，unordered_map 容器和 map 容器仅有一点不同，即 map 容器中存储的数据是有序的，而 unordered_map 容器中是无序的。</p>
+<p>具体来讲，unordered_map 容器和 map 容器一样，以键值对（pair类型）的形式存储数据，存储的各个键值对的键互不相同且不允许被修改。但由于 unordered_map 容器底层采用的是哈希表存储结构，该结构本身不具有对数据的排序功能，所以此容器内部不会自行对存储的键值对进行排序。</p>
+<p>值得一提的是，unordered_map 容器在<code>&lt;unordered_map&gt;</code>头文件中，并位于<code>std</code>命名空间中。因此，如果想使用该容器，代码中应包含如下语句：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//创建空 umap 容器</span></span><br><span class="line">    unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; umap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//向 umap 容器添加新键值对</span></span><br><span class="line">    umap[<span class="number">6</span>] = <span class="number">77</span>;       <span class="comment">//方式一</span></span><br><span class="line">    umap.<span class="built_in">emplace</span>(<span class="number">3</span>, <span class="number">5</span>); <span class="comment">//方式二</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//输出 umap 存储键值对的数量</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;umap size = &quot;</span> &lt;&lt; umap.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//使用迭代器输出 umap 容器存储的所有键值对</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> iter = umap.<span class="built_in">begin</span>(); iter != umap.<span class="built_in">end</span>(); ++iter)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; iter-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; iter-&gt;second &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//使用forrange输出 umap 容器存储的所有键值对</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;&amp;it : umap) <span class="comment">//方式一</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; it.first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it.second &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp;[fir, sec] : umap) <span class="comment">//方式二</span></span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; fir &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; sec &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><p>很简单，记住是<strong>先入后出</strong>的结构。操作时压入一个新成员，返回栈顶成员，或弹出栈顶成员。</p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><ol>
+<li><code>push()</code>: 向栈内压入一个成员；</li>
+<li><code>pop()</code>: 从栈顶弹出一个成员；</li>
+<li><code>empty()</code>: 如果栈为空返回true，否则返回false；</li>
+<li><code>top()</code>: 返回栈顶，但不删除成员；</li>
+<li><code>size()</code>: 返回栈内元素的大小；</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    stack&lt;<span class="type">int</span>&gt; stk;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">50</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        stk.<span class="built_in">push</span>(i);<span class="comment">//入栈</span></span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;栈的大小:&quot;</span> &lt;&lt; stk.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">while</span> (!stk.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; stk.<span class="built_in">top</span>() &lt;&lt; endl;<span class="comment">//返回栈顶成员</span></span><br><span class="line">        stk.<span class="built_in">pop</span>();<span class="comment">//出栈</span></span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;栈的大小:&quot;</span> &lt;&lt; stk.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+        <category>cpp</category>
+      </categories>
+      <tags>
+        <tag>code</tag>
+        <tag>cpp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021年度总结</title>
+    <url>/2022/01/10/2022-01-10-2021%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>现在是2022-01-09下午14时16分，前一天晚上我终于提交了论文初稿，也终于在此刻开始筹备我的2021年度总结。我实在不是一个擅长记录和总结的人，就连翻手机相册也经常会有几个月的大段空白期，一时想不起不知道做了什么，像是有大段记忆被偷走了一样，也可能是有好些时光被我不小心抛在身后了。可我不想遗忘，仔细想想也是有很多事情值得记录下来。</p>
+<p>以下内容纯主观，点开音乐让我们开始吧——</p>
+<span id="more"></span>
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=3413895&auto=0&height=66"></iframe>
+
+<h2 id="1-探索"><a href="#1-探索" class="headerlink" title="1. 探索"></a>1. 探索</h2><p>有一些从没做过的事情，这一年给做了，回想起来也是很有意思的体验</p>
+<h4 id="琴台常客"><a href="#琴台常客" class="headerlink" title="琴台常客"></a>琴台常客</h4><p>从没去过正经音乐厅或是大剧院的我，今年到成了琴台的常客。要说现场看演出和电视上的区别，那可真就大了去了。不过，能感受到多少吸收多少就看个人，目前我也在努力提升欣赏水平之中。</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-22-01-IMG_20210526_190657-min.jpg" title="" alt="IMG_20210526_190657-min.jpg" width="572">
+
+<center>琴台大剧院</center>
+
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-39-15-IMG_20210612_194956-min.jpg" title="" alt="IMG_20210612_194956-min.jpg" width="573">
+
+<center>琴台音乐厅</center>
+
+</center>
+
+<p>部分票据，舞剧《永不消逝的电波》和民族乐团音乐会《魅力中国》的票找不到了orz</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-39-32-IMG_20220109_163830-min.jpg" title="" alt="IMG_20220109_163830-min.jpg" width="308">
+
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-44-31-IMG_20220109_164126-min.jpg" title="" alt="IMG_20220109_164126-min.jpg" width="302">
+
+<p>音乐会的票找不到了，拿节目单照片补上</p>
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-09-49-19-IMG_20220110_094407-min.jpg" alt="IMG_20220110_094407-min.jpg" width="304">
+
+<p>看完这一场，第一次迷上了民乐《丝绸之路》</p>
+<p>《丝绸之路》，虽远不及现场版的震撼但也很精彩<a href="https://www.bilibili.com/video/BV1Rs411t7By?share_source=copy_web">B站链接</a></p>
+<iframe src="//player.bilibili.com/player.html?aid=6437218&bvid=BV1Rs411t7By&cid=10466052&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<p>看完崔健演唱会迷上了崔健，迷上了《一块红布》</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-09-49-00-IMG_20211101_202607-min.jpg" title="" alt="IMG_20211101_202607-min.jpg" width="482">
+
+<center>《一块红布》——崔健</center>
+
+<p>《一块红布》——崔健，<a href="https://www.bilibili.com/video/BV1Hy4y1e74f?share_source=copy_web">B站链接</a></p>
+<p>为了看演出特地买了个小望远镜哈哈，强烈推荐，观看体验直线上升，终于坐在最后一排用望远镜也能看清演员的脸了</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-17-00-23-IMG_20220109_112753-min.jpg" title="" alt="IMG_20220109_112753-min.jpg" width="275">
+
+<p>许久没能静下来好好听歌的我，今年也新喜欢上了几个乐手，崔健、陶喆、王力宏、孙燕姿，都是宝藏歌手啊。听歌也不再是简单的听歌，几乎全是看现场，更有感觉。很多内容B站上都有，强烈推荐！链接会放在其他博客里。</p>
+<h4 id="努力成为老司机"><a href="#努力成为老司机" class="headerlink" title="努力成为老司机"></a>努力成为老司机</h4><p>自从老爸买了辆二手车，每次回家我就是司机，现在开车上路已经完全不会慌啦</p>
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-31-24-IMG_20210430_111905-min.jpg" alt="IMG_20210430_111905-min.jpg" width="178">
+
+<h4 id="搭建自己的博客和知识库"><a href="#搭建自己的博客和知识库" class="headerlink" title="搭建自己的博客和知识库"></a>搭建自己的博客和知识库</h4><p>作为一个喜欢折腾电脑的人，这一年做了许多博客的尝试，起因也是因为想要记录生活，结果折腾完了又搁置了orz。后来又新入坑一个领域叫tiddlyWiki，打算用它构建我的个人知识库，还在探索之中，欢迎多多关注呀，以后两个网页都会长期更新！</p>
+<ul>
+<li><p>博客用来写长文记录生活，地址：<a href="https://leiwei.xyz/">毛利老弟的博客</a></p>
+</li>
+<li><p>wiki知识库用来记录零散的知识和想法，地址：<a href="https://leiwei.xyz/wiki/">胖虎的Wiki</a></p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-10-49-42-Snipaste_2022-01-10_10-49-10.png" title="" alt="Snipaste_2022-01-10_10-49-10.png" width="650">
+
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-10-48-46-post-bg-TiddlyWiki.png" alt="post-bg-TiddlyWiki.png"></p>
+<h4 id="第一次上手电吉他"><a href="#第一次上手电吉他" class="headerlink" title="第一次上手电吉他"></a>第一次上手电吉他</h4><video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../../file/elec_guitar.mp4" type="video/mp4">
+</video>
+
+<h4 id="入门羽毛球"><a href="#入门羽毛球" class="headerlink" title="入门羽毛球"></a>入门羽毛球</h4><p>学会起跳扣杀啦！杀球可以说是羽毛球最大的魅力了</p>
+<p>原有的磅数也不再能满足我了，只好忍痛剪了重新穿了26磅的拍线（拍子最高穿26），看来技术确实是有进步的</p>
+<p>球好贵，毕竟是用羽毛做的，真奢侈运动</p>
+<p>可惜此处没有图orz</p>
+<h4 id="入门游泳"><a href="#入门游泳" class="headerlink" title="入门游泳"></a>入门游泳</h4><p>这一年，呛了好多次水之后，终于学会了蛙泳！（自学成才！），只是天气转凉之后这项活动就搁置了，计划来年向自由泳迈进！</p>
+<h4 id="兼职摄影师"><a href="#兼职摄影师" class="headerlink" title="兼职摄影师"></a>兼职摄影师</h4><p>这一年有人说我会摄影，哈哈，看来要将摄影师的计划捡起来了，可惜相机在西安的朋友那里，封城了想寄快递都不行。</p>
+<p>模特占大半功劳</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-19-17-IMG_20211217_163121-min.jpg" alt="IMG_20211217_163121-min.jpg"></p>
+<h4 id="投稿视频"><a href="#投稿视频" class="headerlink" title="投稿视频"></a>投稿视频</h4><p>试试水，或许哪天觉得这黑历史太黑了我就给删了哈哈</p>
+<iframe src="//player.bilibili.com/player.html?aid=380070268&bvid=BV1hZ4y1X78N&cid=466680905&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h2 id="2-弥补遗憾"><a href="#2-弥补遗憾" class="headerlink" title="2 弥补遗憾"></a>2 弥补遗憾</h2><h4 id="20210623我又毕业啦"><a href="#20210623我又毕业啦" class="headerlink" title="20210623我又毕业啦"></a>20210623我又毕业啦</h4><p>2020年因为疫情匆匆在家毕业了的我们这一届，终于补办毕业典礼了！穿上心心念念的学士服，还有幸和校长握了手。感谢丁导，感谢秦老师和这么一群可爱的老同学们！</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-02-32-IMG_20210622_135025.jpg" alt="IMG20210622135025jpg"></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-05-34-IMG_20210622_124131-min.jpg" alt="IMG20210622124131minjpg"></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-05-46-mmexport1624379186532.jpg" alt="mmexport1624379186532jpg"></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-11-21-%E5%90%88%E7%85%A71-min.jpg" alt="合照1minjpg"></p>
+<h4 id="和过去的自己对话"><a href="#和过去的自己对话" class="headerlink" title="和过去的自己对话"></a>和过去的自己对话</h4><p>参加了新一年研究生复试的志愿者，看着紧张的考生们，想起两年前同样紧张的自己。考研的那半年时光的磨练将成为我一生的烙印，也带来了强烈的后遗症，或许我从没把那种奇特的状态完全摆脱，看着同样经历着这一切的考生们，好像又释然了许多。</p>
+<h2 id="3-活动满满"><a href="#3-活动满满" class="headerlink" title="3 活动满满"></a>3 活动满满</h2><h4 id="0619代表协会参加校级演出"><a href="#0619代表协会参加校级演出" class="headerlink" title="0619代表协会参加校级演出"></a>0619代表协会参加校级演出</h4><p>又当演员又当观众的充实一天，托社团的福，这算是我参加过最大的演出活动了</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-13-52-IMG_20210619_102505-min.jpg" title="" alt="IMG_20210619_102505-min.jpg" width="391">
+
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-44-12-1641716963869.jpeg" title="" alt="1641716963869.jpeg" width="395">
+
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-46-11-1641716960797.jpeg" alt="1641716960797.jpeg" width="394">
+
+<iframe src="//player.bilibili.com/player.html?aid=931306123&bvid=BV1RM4y1u78w&cid=357607175&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<p><a href="https://www.bilibili.com/video/BV1RM4y1u78w?share_source=copy_web">完整链接</a></p>
+<h4 id="协会年终演出"><a href="#协会年终演出" class="headerlink" title="协会年终演出"></a>协会年终演出</h4><p>当然少不了我亲爱的星一口琴社，从16年底到现在，想想已经五年之久了。能经历这么长时间真是一件神奇而又幸运的事情。</p>
+<p>口琴手兼职鼓手的一天</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-57-06-1641718501641-min.jpeg" title="" alt="1641718501641minjpeg" width="535">
+
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-16-56-31-1641718447164.jpeg" title="" alt="1641718447164jpeg" width="537">
+
+<p>纪念品小夜灯真的是太好看了</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-17-21-IMG_20211219_175509-min.jpg" title="" alt="IMG_20211219_175509-min.jpg" width="484">
+
+<h4 id="师姐的生日听老师弹吉他"><a href="#师姐的生日听老师弹吉他" class="headerlink" title="师姐的生日听老师弹吉他"></a>师姐的生日听老师弹吉他</h4><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-16-34--5d4a6e18c65d6cda-min.jpg" title="" alt="-5d4a6e18c65d6cda-min.jpg" width="472">
+
+<h4 id="师兄毕业了"><a href="#师兄毕业了" class="headerlink" title="师兄毕业了"></a>师兄毕业了</h4><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-21-11-IMG_20210608_170433_004-min.jpg" title="" alt="IMG_20210608_170433_004-min.jpg" width="467">
+
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-31-22-IMG_20210608_171955-min.jpg" alt="IMG_20210608_171955-min.jpg" width="464">
+
+<h4 id="元旦回家放风筝啦"><a href="#元旦回家放风筝啦" class="headerlink" title="元旦回家放风筝啦"></a>元旦回家放风筝啦</h4><img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-09-56-45-IMG_20220101_171948_edit_5093276200263-min.jpg" alt="IMG_20220101_171948_edit_5093276200263-min.jpg" width="467">
+
+<p>爸爸放起风筝来像个孩子</p>
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../../file/fangfengzheng.mp4" type="video/mp4">
+</video>
+
+<h4 id="东湖樱花园"><a href="#东湖樱花园" class="headerlink" title="东湖樱花园"></a>东湖樱花园</h4><p>爸妈来学校看我，顺道就去了东湖</p>
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-10-19-16-IMG_20211022_145644-min.jpg" alt="IMG_20211022_145644-min.jpg" width="463">
+
+<p>和实验室的朋友们去东湖游船、磨山索道、森林公园烧烤</p>
+<p>票根也能晒一晒</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-15-50-17-DF48E08B123207035CAF10E155EF775E.jpg" title="" alt="DF48E08B123207035CAF10E155EF775E.jpg" width="347">
+
+<p>暑假几个傻子在视频</p>
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-09-56-32-Screenshot_20210721_191507_com.tencent.mm-min.jpg" alt="Screenshot_20210721_191507_com.tencent.mm-min.jpg" width="321">
+
+<h4 id="20210730和老姐去重庆"><a href="#20210730和老姐去重庆" class="headerlink" title="20210730和老姐去重庆"></a>20210730和老姐去重庆</h4><img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-10-06-02-IMG_20210730_211557-min.jpg" alt="IMG_20210730_211557-min.jpg" width="451">
+
+<img title="" src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-10-05-51-IMG_20210730_215813-min.jpg" alt="IMG_20210730_215813-min.jpg" width="453">
+
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-10-06-32-IMG_20210730_215641-min.jpg" title="" alt="IMG_20210730_215641-min.jpg" width="455">
+
+<p>然后就有了老姐帮我做的第一条旅行vlog</p>
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../../file/chongqingvlog.mp4" type="video/mp4">
+</video>
+
+<h4 id="南湖花海❀"><a href="#南湖花海❀" class="headerlink" title="南湖花海❀"></a>南湖花海❀</h4><p>许久没去南湖校区，看到花海突然很感动，太喜欢了，就骑小电驴兜了一圈录了下来</p>
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../../file/huahai.mp4" type="video/mp4">
+</video>
+
+<h4 id="吉协摇滚音乐节"><a href="#吉协摇滚音乐节" class="headerlink" title="吉协摇滚音乐节"></a>吉协摇滚音乐节</h4><p>从16年本科入校以来，每年都不会缺席的</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-17-09-49-IMG_20220109_170644-min.jpg" title="" alt="IMG_20220109_170644-min.jpg" width="455">
+
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/09-17-09-58-IMG_20220109_170844-min.jpg" title="" alt="IMG_20220109_170844-min.jpg" width="460">
+
+<p>这一段太好听了，忍不住想放上来</p>
+<video id="video" controls="" preload="none">
+    <source id="mp4" src="../../../../file/jixieshipin.mp4" type="video/mp4">
+</video>
+
+<h4 id="和朋友在琴台看民族乐团音乐会"><a href="#和朋友在琴台看民族乐团音乐会" class="headerlink" title="和朋友在琴台看民族乐团音乐会"></a>和朋友在琴台看民族乐团音乐会</h4><p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-50-33-mmexport1639764930916-min.jpg" alt="mmexport1639764930916-min.jpg"></p>
+<h2 id="4-放飞自我"><a href="#4-放飞自我" class="headerlink" title="4 放飞自我"></a>4 放飞自我</h2><p>从不自拍看镜头就躲的我，今年居然开始放飞自我了，开始搞怪、装酷，拿自拍当头像</p>
+<p>有人在地铁上睡着了哈哈，这张当过一段时间微信头像</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-28-43-IMG_20210711_230623(1)-min.jpg" alt="IMG_20210711_230623(1)-min.jpg"></p>
+<p>奇怪的Pose，这张也当过微信头像</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-29-02-mmexport1626000536630-min.jpg" alt="mmexport1626000536630-min.jpg"></p>
+<p>这么穿在大街上回头率真的很高</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-29-08-mmexport1626000564140-min.jpg" alt="mmexport1626000564140-min.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-29-14-mmexport1626000566457-min.jpg" alt="mmexport1626000566457-min.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-29-16-mmexport1626016695835-min.jpg" alt="mmexport1626016695835-min.jpg"></p>
+<p>难得这样放飞自我，可能还是因为有这么一群朋友在身边吧</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-21-39-17-mmexport1626000567519-min.jpg" alt="mmexport1626000567519-min.jpg"></p>
+<p>再来一张黑历史</p>
+<p><img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/11-00-47-39-mmexport1640255757749(1)-min.jpg" alt="mmexport1640255757749(1)-min.jpg"></p>
+<h2 id="5-成长"><a href="#5-成长" class="headerlink" title="5 成长"></a>5 成长</h2><p>最重要的是——这一年想清楚了很多道理，算是成长了许多</p>
+<h4 id="关于拖延症与逃避"><a href="#关于拖延症与逃避" class="headerlink" title="关于拖延症与逃避"></a>关于拖延症与逃避</h4><blockquote>
+<p>我们每时每刻都处在分岔路口<br>可以选择任意一条路前进，同时另一条路会消失<br>也可以在原地踌躇一下再选择，这叫充分思考做好准备<br>也可以在原地多徘徊好一会，直到不得不前进，这叫拖延<br>继续止步不前，就叫逃避<br>原地徘徊太久，就容易迷失了方向，踏空一步落入周围的深渊<br>其实无论走那条路最后都会后悔，逃避才是最大的败北。<br>——写于2021-11-02</p>
+</blockquote>
+<p>卸载过英雄联盟，知乎和哔哩哔哩，<del>然后开始沉迷消消乐（划掉），</del></p>
+<p>拨开所有暂且逃避的借口去直面生活直面问题，然后发现，其实也就那么回事，</p>
+<p>拖延和逃避过程中，浪费的时间和错过的机会才是最可惜的。</p>
+<h4 id="关于未来与迷茫"><a href="#关于未来与迷茫" class="headerlink" title="关于未来与迷茫"></a>关于未来与迷茫</h4><blockquote>
+<p>人生像是有惯性的，我能在一定程度上看到前进的方向。<br>有时突然一抬头，看见了某个人，就会感叹：唉？这不就是之后的我吗？<br>我好像正在朝着这个方向靠着惯性前进呢。<br>怎么办呢，是好是坏，要及时转向吗？<br>有些期盼，有些担忧，庆幸他们拥有的，同时也害怕他们失去的，<br>最后还是顺其自然，见机行事了。<br>好像看得更透了，也好像更迷茫了。<br>——写于2021-11-30</p>
+</blockquote>
+<p>从大二迷茫于是否要读研，到研二迷茫于研究方向，迷茫于职业选择，好像一直是处在焦虑与不安之中，而后来我突然明白一个道理：所有在我身上已经发生过的事情，成就了我现在这样一个独一无二复杂的个体，也大致决定了以后会走上什么样的道路。我所需要做的就是接受这样的既定事实，并且走好接下来的每一步，这样就很好了。</p>
+<h4 id="关于长期不健康的状态"><a href="#关于长期不健康的状态" class="headerlink" title="关于长期不健康的状态"></a>关于长期不健康的状态</h4><blockquote>
+<p>失眠已经成常态了，但很奇怪的是，失眠应该是一个贬义词，指一种不好的状态，但是我今天居然可以心安理得的，以一种非常平和的心态静躺了两个多小时，想了紧张的事情，也想了快乐的事情，想了现在，也想了将来，背景音乐是无限循环的关大洲的九州同，就像观看一幕幕剧，任由思绪被牵着走，飞到九霄云外，又飞回来，再一看，噢，这一趟旅程花了两个小时多一点，想记录一点东西，写了这么点就开始困的不行。害，锻炼身体和养成生物钟得尽早安排喽！</p>
+</blockquote>
+<p>写完这一段，就很神奇般的再也没有失眠过，也是心态的转变了吧</p>
+<h4 id="关于与自己和解，与世界和解"><a href="#关于与自己和解，与世界和解" class="headerlink" title="关于与自己和解，与世界和解"></a>关于与自己和解，与世界和解</h4><p>2021年元旦我留下了这样的话：</p>
+<img src="https://raw.githubusercontent.com/lei-wei/pic_bed/main/2022/01/10-09-41-45-Screenshot_20220110_093854-min.jpg" title="" alt="Screenshot20220110093854minjpg" width="630">
+
+<p>那一天发生了什么让我印象深刻的事呢？一年后2022年元旦，我写下了这样的文字：</p>
+<blockquote>
+<p>这一年还是发生了太多事情，就从去年的总结开始说吧。去年跨年的晚上，买了零食回宿舍准备看B站跨年晚会吃零食和朋友聊聊天跨年，可就是突然突然的一刹那，发觉自己孑然一身，孤独涌向了我瞬间淹没了我，简直是透不过气来，身边的人有相聚庆祝的，也有在一起抱团取暖的，可那喧嚣与我无关。拿出手机，线上倒是很热闹，群里都是无所事事的闲聊，私下聊天的都是礼貌的问候，礼貌地保持着距离。也不怪任何人，在这一刻之前我也从没想过要和任何人抱团，一直寻求的是绝对人格独立思想独立的生活，可在这一刻突然领悟到了什么是孤独，什么是内心的空洞。当时就在后悔，为什么不回家呐，家里是可以假装不会孤单的最后的港湾了。当时还有在疑惑，那么多曾经的好朋友，感情是如何慢慢淡下来的呢，平时怎么会忘了找他们联络联络呢，我所追求的这种独立自主绝对理性的状态，是否太沉浸其中了而忽视了很多基础而重要的东西呢？所以写下了这几句话，希望走出自己的局限，希望把忽视的遗忘的都给找回来。如今这一年过去了，好像我还是那个钻牛角尖的我，但似乎不是像之前那么迷茫了。心态逐渐变得平和而坚定，内心多了一些温暖和力量。看吧，是会越来越好的。算是对2021元旦的心路历程记录，和此刻2022元旦的一个回应。</p>
+<p>——写于2022年元旦</p>
+</blockquote>
+<p>今年元旦跨年的时候正被论文烦心着呢，跨啥年啊，偶然发现一年前留下的文字，伴随着的记忆顿时扑面而来，才发现这一年真的大变样了。我自我认知是一个懦弱的理想主义者，这世界和我想的不一样，我也没敢站出来大声反抗，干的最多的也就是在心里跟自己作对而已，不愿妥协，但很多时候不得不妥协，那也得死扛着不愿认输。这一年发生了太多事情冲击到我使我措手不及，有朋友生病遭遇重大变故也不知如何帮助；有朋友突然退学消失，突然就单方面断了联系；也逐渐看清了大人世界的一些残酷的规则，想尽力避开可又不得不去融入。甚至有一段时间我不断追问身边的人：你每天起床的动力是什么？找不到标准答案，更找不到适合我的答案。一年过去了，我还是不知道确切的答案是什么，但这个问题已经不重要了，我还是习惯钻牛角尖的那个人，但心态已经逐渐变得平和，逐渐找到了和世界相处的方式，也更加坚定了我内心不会动摇的东西。长期的失眠状况消失了，没任务安排也能早八起床了，综合这些迹象来看，算是慢慢与自己和解，也与世界和解了。</p>
+<h1 id="最后——2022的计划"><a href="#最后——2022的计划" class="headerlink" title="最后——2022的计划"></a>最后——2022的计划</h1><p>我是一个讨厌立flag的人，但最近从论文的折磨中解脱出来，又恰好临近放假，又好多好多想要做的事情，就在这里列出来，提醒提醒自己。一段时间之后再回来看看哪些做到了，哪些又没做到，就像乘坐时光机回来看看2022年初的我自己，应该也会很有意思。</p>
+<ul>
+<li><p>记录生活，底线是月更，会发在博客：<a href="https://leiwei.xyz/">毛利老弟的博客</a></p>
+</li>
+<li><p>打造自己的知识库，日常积累，地址：<a href="https://leiwei.xyz/wiki/">胖虎的Wiki</a></p>
+</li>
+<li><p>坚持晚十二早八的生物钟</p>
+</li>
+<li><p>健身计划，目标是增重10斤</p>
+</li>
+<li><p>运动计划，精进游泳和羽毛球技术</p>
+</li>
+<li><p>摄影计划，学习技术也记录生活</p>
+</li>
+<li><p>刷算法题，为就业做准备</p>
+</li>
+<li><p>学习计划，论文论文论文论文论文论文</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>记录</category>
+      </categories>
+      <tags>
+        <tag>总结</tag>
+      </tags>
+  </entry>
+</search>
