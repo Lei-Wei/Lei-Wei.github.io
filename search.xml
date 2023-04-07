@@ -1418,14 +1418,14 @@
       </tags>
   </entry>
   <entry>
-    <title>记录美好的一天</title>
-    <url>/2022/09/16/%E8%AE%B0%E5%BD%95%E7%BE%8E%E5%A5%BD%E7%9A%84%E4%B8%80%E5%A4%A9/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>一个简单的自启动脚本</title>
     <url>/2023/04/07/%E5%B0%9D%E8%AF%95%E7%94%A8python%E5%86%99%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="一个简单的自启动脚本"><a href="#一个简单的自启动脚本" class="headerlink" title="一个简单的自启动脚本"></a>一个简单的自启动脚本</h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>前段时间每天都在电脑前埋头苦干被毕业论文折磨的时候，时间长了发现都形成了一个固有的流程，首先打开一堆软件、网站，也就是弄好工作的一个准备环境，然后才能开始干活。准备工作大致包括：</p>
+    <content><![CDATA[<blockquote>
+<p>不得不说，人在痛苦的时候，干别的事情的创造力和效率都是极高的</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>前段时间每天都在电脑前埋头苦干被毕业论文折磨的时候，时间长了发现都形成了一个固有的流程，首先打开一堆软件、网站，也就是弄好工作的一个准备环境，然后才能开始干活。准备工作大致包括：</p>
 <ul>
 <li>网页 cnki、谷歌学术、scihub等</li>
 <li>文献管理软件 Zotero</li>
